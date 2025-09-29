@@ -1,0 +1,11 @@
+body{font-family:'Metropolis', sans-serif;margin:0;padding:20px;background:#fafafa;display:flex;justify-content:center}
+.card{background:#fff;padding:16px 20px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.06);max-width:980px;width:100%}
+h1{margin:0 0 12px;font-size:22px}
+.controls, .slider-controls {display:flex;flex-direction:column;gap:12px;margin-top:12px}
+.controls div, .slider-controls div {display:flex;flex-direction:column;gap:4px;}
+label{font-weight:bold;font-size:14px;margin-bottom:2px;}
+button,input,textarea{padding:8px 12px;border-radius:8px;border:1px solid #ddd;background:#fff;font-family:inherit;font-size:14px;width:100%;box-sizing:border-box;}
+textarea{min-height:80px;resize:vertical}
+.canvas-container{margin-top:20px;border:1px solid #ddd;cursor:grab; width: 1080px; max-width: 100%;}
+.canvas-container canvas{width: 100%; height: auto;}
+.canvas-container.grabbing{cursor:grabbing;}
