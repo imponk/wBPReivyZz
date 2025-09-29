@@ -113,11 +113,11 @@ function renderTemplate() {
         ctx.save();
         const kreditY = logoMedsosBottomY > 0 ? logoMedsosBottomY + 50 : canvas.height - 100;
         ctx.translate(canvas.width - 50, kreditY);
-        ctx.rotate(-Math.PI / 2);
+        ctx.rotate(-Math.PI / -2);
         ctx.textAlign = 'left';
         ctx.fillStyle = '#000000';
         ctx.font = 'bold 18px Metropolis';
-        ctx.fillText(kreditInput.value, 0, 0);
+        ctx.fillText(kreditInput.value, 350, 30);
         ctx.restore();
     }
     
