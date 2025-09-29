@@ -66,7 +66,7 @@ function renderTemplate() {
     // Bingkai digambar terlebih dahulu
     const frameMargin = 100;
     ctx.strokeStyle = '#000000';
-    ctx.lineWidth = 0.5; 
+    ctx.lineWidth = 1; 
     ctx.strokeRect(
         frameMargin, 
         frameMargin, 
