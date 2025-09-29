@@ -60,7 +60,7 @@ function getWrappedLines(text, maxWidth, font) {
 // --- FUNGSI RENDER UTAMA ---
 function renderTemplate() {
     // Latar belakang utama kanvas (putih)
-    ctx.fillStyle = "#FFFFFF";
+    ctx.fillStyle = "#FAF9F6";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Bingkai digambar terlebih dahulu
