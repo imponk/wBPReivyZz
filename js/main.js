@@ -144,11 +144,11 @@ function renderTemplate() {
     currentY += kutipanLines.length * kutipanLineHeight;
     currentY += 20;
 
-    ctx.font = 'bold 32px "Proxima Nova"';
+    ctx.font = 'bold 32px Proxima Nova';
     ctx.fillText(namaInput.value || "Nama", margin, currentY);
     currentY += 40;
 
-    ctx.font = 'italic 32px "Proxima Nova"';
+    ctx.font = 'italic 32px Proxima Nova';
     ctx.fillText(jabatanInput.value || "Jabatan", margin, currentY);
 
     if (logoJPBiru.complete && logoJPBiru.naturalWidth > 0) {
