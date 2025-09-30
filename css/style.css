@@ -1,5 +1,11 @@
 @font-face {
   font-family: 'Proxima Nova';
+  font-weight: normal;
+  font-style: normal;
+  src: url('assets/proxima-nova.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Proxima Nova';
   font-weight: italic;
   font-style: normal;
   src: url('assets/proxima-nova-italic.woff2') format('woff2');
@@ -11,8 +17,7 @@
   font-style: normal;
   src: url('assets/proxima-nova-bold.woff2') format('woff2');
 }
-body{font-family:'Metropolis', sans-serif;margin:0;padding:20px;background:#fafafa;display:flex;justify-content:center}
-.card{background:#fff;padding:16px 20px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.06);max-width:980px;width:100%}
+
 h1{margin:0 0 12px;font-size:22px}
 .controls, .slider-controls {display:flex;flex-direction:column;gap:12px;margin-top:12px}
 .controls div, .slider-controls div {display:flex;flex-direction:column;gap:4px;}
