@@ -61,6 +61,7 @@ function drawMultilineText(text, x, y, font, color, lineHeight, maxWidth) {
     ctx.fillStyle = color;
     const paragraphs = String(text || '').split(/\n/);
     let offsetY = 0;
+
     for (const paragraph of paragraphs) {
         const words = paragraph.split(' ');
         let currentLine = words[0] || '';
@@ -78,9 +79,10 @@ function drawMultilineText(text, x, y, font, color, lineHeight, maxWidth) {
         ctx.fillText(currentLine, x, y + offsetY);
         offsetY += lineHeight;
     }
-    return y + offsetY;
-}
 
+    // Hilangkan extra gap di akhir blok
+    return y + offsetY - lineHeight;
+}
 
 // --- FUNGSI RENDER UTAMA ---
 function renderTemplate() {
@@ -88,7 +90,7 @@ function renderTemplate() {
     ctx.fillStyle = "#FAF9F6";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Bingkai digambar terlebih dahulu
+    // Bingkai
     const frameMargin = 100;
     ctx.strokeStyle = '#000000';
     ctx.lineWidth = 1; 
@@ -99,7 +101,7 @@ function renderTemplate() {
         canvas.height - frameMargin * 2
     );
 
-    // Foto digambar setelah bingkai, sehingga berada di atasnya
+    // Foto
     if (appState.photo) {
         ctx.fillStyle = "#FAF9F6";
         ctx.fillRect(frameMargin, frameMargin, canvas.width - frameMargin * 2, canvas.height - frameMargin * 2);
@@ -134,6 +136,7 @@ function renderTemplate() {
         logoMedsosBottomY = y + h;
     }
 
+    // Kredit Foto
     if (kreditInput.value) {
         ctx.save();
         const kreditY = logoMedsosBottomY > 0 ? logoMedsosBottomY + 50 : canvas.height - 100;
@@ -157,6 +160,7 @@ function renderTemplate() {
     }
     currentY += 60;
 
+    // Kutipan
     const kutipanText = kutipanInput.value || "Isi kutipan. Di sini adalah isi kutipan. Di sini adalah isi kutipan.";
     const kutipanFont = '40pt "DM Serif Display"';
     const kutipanLineHeight = 50;
@@ -169,34 +173,38 @@ function renderTemplate() {
     currentY += kutipanLines.length * kutipanLineHeight;
     currentY += 20;
 
-
+    // Nama (multi-line rapat)
     currentY = drawMultilineText(
-    namaInput.value || "Nama",
-    margin,
-    currentY,
-    'bold 32px "Proxima Nova"',
-    "#000000",
-    25,
-    canvas.width - margin * 4
-);
+        namaInput.value || "Nama",
+        margin,
+        currentY,
+        'bold 32px "Proxima Nova"',
+        "#000000",
+        32, // lineHeight seukuran font
+        canvas.width - margin * 4
+    );
 
-currentY = drawMultilineText(
-    jabatanInput.value || "Jabatan",
-    margin,
-    currentY,
-    'italic 28px "Proxima Nova"',
-    "#333333",
-    26,
-    canvas.width - margin * 4
-);
+    // Jarak antar blok nama-jabatan
+    currentY += 12; 
 
+    // Jabatan (multi-line rapat)
+    currentY = drawMultilineText(
+        jabatanInput.value || "Jabatan",
+        margin,
+        currentY,
+        'italic 28px "Proxima Nova"',
+        "#333333",
+        28, // lineHeight seukuran font
+        canvas.width - margin * 4
+    );
+
+    // Logo bawah
     if (logoJPBiru.complete && logoJPBiru.naturalWidth > 0) {
         const w = 95;
         const h = 95;
         ctx.drawImage(logoJPBiru, 0, canvas.height - h, w, h);
     }
 }
-
 
 // --- EVENT LISTENERS ---
 function initialize() {
@@ -234,7 +242,7 @@ function initialize() {
         URL.revokeObjectURL(a.href);
     });
 
-    // Drag and Drop Logic
+    // Drag Foto
     canvas.addEventListener('mousedown', e => {
         if (!appState.photo) return;
         appState.isDragging = true;
@@ -255,6 +263,7 @@ function initialize() {
         canvasContainer.classList.remove('grabbing');
     });
     
+    // Render saat asset selesai load
     const allAssets = [logoKoranJawaPos, logoJPBiru, ikonKutip, logoMedsosVertikal];
     allAssets.forEach(img => {
         if (img.complete) {
