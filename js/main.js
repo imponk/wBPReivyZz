@@ -228,12 +228,12 @@ function renderTemplate() {
     currentY,
     'bold 32px "Proxima Nova"',
     "#000000",
-    36, // rapat tapi tetap terbaca
+    34, // rapat tapi tetap terbaca
     canvas.width - margin * 4
   );
 
   // Jarak antar blok
-  currentY += 14;
+  currentY += 10;
 
   // Jabatan (lineHeight rapat)
   currentY = drawMultilineText(
@@ -242,7 +242,7 @@ function renderTemplate() {
     currentY,
     'italic 28px "Proxima Nova"',
     "#333333",
-    32,
+    30,
     canvas.width - margin * 4
   );
 
