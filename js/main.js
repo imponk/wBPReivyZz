@@ -185,7 +185,7 @@ currentY = drawMultilineText(
 );
 
 // Jarak antar-blok
-currentY += 50;
+currentY += 30;
 
 // Jabatan (baris antar-line agak renggang, misalnya 34px)
 currentY = drawMultilineText(
