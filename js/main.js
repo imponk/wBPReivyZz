@@ -233,7 +233,7 @@ function renderTemplate() {
   );
 
   // Jarak antar blok
-  currentY += 10;
+  currentY += 6;
 
   // Jabatan (lineHeight rapat)
   currentY = drawMultilineText(
