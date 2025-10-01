@@ -68,6 +68,12 @@ textarea {
   box-sizing: border-box;
 }
 
+#namaInput,
+#jabatanInput {
+  min-height: 40px; /* lebih kecil dari kutipan tapi masih multi-line */
+  resize: vertical; /* biar bisa ditarik panjang */
+}
+
 button {
   background: #007cbc;
   color: #fff;
