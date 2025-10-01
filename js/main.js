@@ -181,11 +181,11 @@ currentY = drawMultilineText(
     'bold 32px "Proxima Nova"',
     "#000000",
     38, // lineHeight lebih besar dari font size
-    canvas.width - margin * 4
+    canvas.width - margin * 6
 );
 
 // Jarak antar-blok
-currentY += 30;
+currentY += 50;
 
 // Jabatan (baris antar-line agak renggang, misalnya 34px)
 currentY = drawMultilineText(
@@ -195,7 +195,7 @@ currentY = drawMultilineText(
     'italic 28px "Proxima Nova"',
     "#333333",
     34, // lineHeight lebih besar
-    canvas.width - margin * 4
+    canvas.width - margin * 6
 );
 
 // --- EVENT LISTENERS ---
