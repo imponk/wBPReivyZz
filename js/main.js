@@ -56,6 +56,31 @@ function getWrappedLines(text, maxWidth, font) {
     return lines;
 }
 
+function drawMultilineText(text, x, y, font, color, lineHeight, maxWidth) {
+    ctx.font = font;
+    ctx.fillStyle = color;
+    const paragraphs = String(text || '').split(/\n/);
+    let offsetY = 0;
+    for (const paragraph of paragraphs) {
+        const words = paragraph.split(' ');
+        let currentLine = words[0] || '';
+        for (let i = 1; i < words.length; i++) {
+            const word = words[i];
+            const testLine = currentLine + " " + word;
+            if (ctx.measureText(testLine).width > maxWidth && currentLine) {
+                ctx.fillText(currentLine, x, y + offsetY);
+                offsetY += lineHeight;
+                currentLine = word;
+            } else {
+                currentLine = testLine;
+            }
+        }
+        ctx.fillText(currentLine, x, y + offsetY);
+        offsetY += lineHeight;
+    }
+    return y + offsetY;
+}
+
 
 // --- FUNGSI RENDER UTAMA ---
 function renderTemplate() {
