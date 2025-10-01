@@ -1,15 +1,18 @@
+/* === FONT FACE === */
 @font-face {
   font-family: 'Proxima Nova';
   font-weight: normal;
   font-style: normal;
   src: url('assets/proxima-nova.woff2') format('woff2');
 }
+
 @font-face {
   font-family: 'Proxima Nova';
-  font-weight: italic;
-  font-style: normal;
+  font-weight: normal;
+  font-style: italic;
   src: url('assets/proxima-nova-italic.woff2') format('woff2');
 }
+
 @font-face {
   font-family: 'Proxima Nova';
   font-weight: bold;
@@ -17,6 +20,7 @@
   src: url('assets/proxima-nova-bold.woff2') format('woff2');
 }
 
+/* === GLOBAL === */
 body {
   font-family: 'Proxima Nova', system-ui, sans-serif;
   background: #fafafa;
@@ -33,6 +37,7 @@ h1 {
   text-align: center;
 }
 
+/* === FORM CONTROL === */
 .controls,
 .slider-controls {
   display: flex;
@@ -66,12 +71,7 @@ textarea {
   font-size: 14px;
   width: 100%;
   box-sizing: border-box;
-}
-
-#namaInput,
-#jabatanInput {
-  min-height: 40px; /* lebih kecil dari kutipan tapi masih multi-line */
-  resize: vertical; /* biar bisa ditarik panjang */
+  transition: all 0.2s ease;
 }
 
 button {
@@ -79,11 +79,14 @@ button {
   color: #fff;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
 }
 
 button:hover {
   background: #005a8f;
+}
+
+button:active {
+  transform: scale(0.97);
 }
 
 textarea {
@@ -91,6 +94,7 @@ textarea {
   resize: vertical;
 }
 
+/* === CANVAS === */
 .canvas-container {
   margin-top: 20px;
   border: 1px solid #ddd;
