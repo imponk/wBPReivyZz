@@ -176,7 +176,7 @@ function renderTemplate() {
     currentY,
     'bold 32px "Proxima Nova"',
     "#000000",
-    30,
+    28,
     canvas.width - margin * 2
 );
 
