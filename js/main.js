@@ -176,8 +176,8 @@ function renderTemplate() {
     currentY,
     'bold 32px "Proxima Nova"',
     "#000000",
-    28,
-    canvas.width - margin * 2
+    25,
+    canvas.width - margin * 4
 );
 
 currentY = drawMultilineText(
