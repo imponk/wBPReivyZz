@@ -263,12 +263,15 @@ function renderTemplate() {
 
 // --- EVENT LISTENERS ---
 function initialize() {
-  // Input teks langsung render
-  [kutipanInput, namaInput, jabatanInput, kreditInput, quoteYSlider].forEach(
-    (el) => {
-      el.addEventListener("input", renderTemplate);
-    }
-  );
+  [kutipanInput, namaInput, jabatanInput, kreditInput, quoteYSlider].forEach(el => {
+    el.addEventListener('input', renderTemplate);
+  });
+
+  // tambahan untuk dropdown warna kredit
+  kreditColorInput.addEventListener('change', renderTemplate);
+  
+  // ... sisanya tetap
+}
 
   // Upload foto
   uploadPhotoInput.addEventListener("change", (e) => {
