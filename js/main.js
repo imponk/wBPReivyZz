@@ -10,6 +10,7 @@ const kutipanInput = document.getElementById("kutipanInput");
 const namaInput = document.getElementById("namaInput");
 const jabatanInput = document.getElementById("jabatanInput");
 const kreditInput = document.getElementById("kreditInput");
+const kreditColorInput = document.getElementById('kreditColor');
 
 const downloadBtn = document.getElementById("download");
 const canvasContainer = document.getElementById("canvasContainer");
@@ -170,19 +171,22 @@ function renderTemplate() {
   }
 
   // Kredit Foto
-  if (kreditInput.value) {
-    ctx.save();
-    const kreditY =
-      logoMedsosBottomY > 0 ? logoMedsosBottomY + 50 : canvas.height - 100;
+if (kreditInput.value) {
+  ctx.save();
+  const kreditY = logoMedsosBottomY > 0 ? logoMedsosBottomY + 50 : canvas.height - 100;
+  ctx.translate(canvas.width - 50, kreditY);
+  ctx.rotate(-Math.PI / -2);
+  ctx.textAlign = 'right';
+  ctx.fillStyle = kreditColorInput.value || '#000000'; // pakai warna pilihan
+  ctx.font = 'bold 18px Metropolis';
+  ctx.fillText(kreditInput.value, 350, 30);
+  ctx.restore();
+}
 
-    ctx.translate(canvas.width - 50, kreditY);
-    ctx.rotate(-Math.PI / -2);
-    ctx.textAlign = "right";
-    ctx.fillStyle = "#000000";
-    ctx.font = 'bold 18px "Metropolis"';
-    ctx.fillText(kreditInput.value, 350, 30);
-    ctx.restore();
-  }
+[kutipanInput, namaInput, jabatanInput, kreditInput, kreditColorInput, quoteYSlider]
+  .forEach(el => {
+    el.addEventListener('input', renderTemplate);
+  });
 
   // --- KONTEN KUTIPAN ---
   const margin = 160;
