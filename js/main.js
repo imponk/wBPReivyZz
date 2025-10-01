@@ -180,12 +180,12 @@ function renderTemplate() {
         currentY,
         'bold 32px "Proxima Nova"',
         "#000000",
-        34, // lineHeight seukuran font
-        canvas.width - margin * 5
+        36, // lineHeight seukuran font
+        canvas.width - margin * 8
     );
 
     // Jarak antar blok nama-jabatan
-    currentY += 20; 
+    currentY += 30; 
 
     // Jabatan (multi-line rapat)
     currentY = drawMultilineText(
@@ -194,8 +194,8 @@ function renderTemplate() {
         currentY,
         'italic 28px "Proxima Nova"',
         "#333333",
-        30, // lineHeight seukuran font
-        canvas.width - margin * 5
+        34, // lineHeight seukuran font
+        canvas.width - margin * 8
     );
 
     // Logo bawah
