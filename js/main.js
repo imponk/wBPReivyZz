@@ -169,12 +169,26 @@ function renderTemplate() {
     currentY += kutipanLines.length * kutipanLineHeight;
     currentY += 20;
 
-    ctx.font = 'bold 32px "Proxima Nova"';
-    ctx.fillText(namaInput.value || "Nama", margin, currentY);
-    currentY += 40;
 
-    ctx.font = 'italic 32px "Proxima Nova"';
-    ctx.fillText(jabatanInput.value || "Jabatan", margin, currentY);
+    currentY = drawMultilineText(
+    namaInput.value || "Nama",
+    margin,
+    currentY,
+    'bold 32px "Proxima Nova"',
+    "#000000",
+    40,
+    canvas.width - margin * 2
+);
+
+currentY = drawMultilineText(
+    jabatanInput.value || "Jabatan",
+    margin,
+    currentY,
+    'italic 28px "Proxima Nova"',
+    "#333333",
+    34,
+    canvas.width - margin * 2
+);
 
     if (logoJPBiru.complete && logoJPBiru.naturalWidth > 0) {
         const w = 95;
