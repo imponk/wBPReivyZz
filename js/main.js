@@ -173,30 +173,38 @@ function renderTemplate() {
     currentY += kutipanLines.length * kutipanLineHeight;
     currentY += 20;
 
-// Nama (baris antar-line agak renggang, misalnya 38px)
-currentY = drawMultilineText(
-    namaInput.value || "Nama",
-    margin,
-    currentY,
-    'bold 32px "Proxima Nova"',
-    "#000000",
-    34px, // lineHeight lebih besar dari font size
-    canvas.width - margin * 6
-);
+    // Nama (multi-line rapat)
+    currentY = drawMultilineText(
+        namaInput.value || "Nama",
+        margin,
+        currentY,
+        'bold 32px "Proxima Nova"',
+        "#000000",
+        32px, // lineHeight seukuran font
+        canvas.width - margin * 4
+    );
 
-// Jarak antar-blok
-currentY += 50;
+    // Jarak antar blok nama-jabatan
+    currentY += 12; 
 
-// Jabatan (baris antar-line agak renggang, misalnya 34px)
-currentY = drawMultilineText(
-    jabatanInput.value || "Jabatan",
-    margin,
-    currentY,
-    'italic 28px "Proxima Nova"',
-    "#333333",
-    34px, // lineHeight lebih besar
-    canvas.width - margin * 6
-);
+    // Jabatan (multi-line rapat)
+    currentY = drawMultilineText(
+        jabatanInput.value || "Jabatan",
+        margin,
+        currentY,
+        'italic 28px "Proxima Nova"',
+        "#333333",
+        28px, // lineHeight seukuran font
+        canvas.width - margin * 4
+    );
+
+    // Logo bawah
+    if (logoJPBiru.complete && logoJPBiru.naturalWidth > 0) {
+        const w = 95;
+        const h = 95;
+        ctx.drawImage(logoJPBiru, 0, canvas.height - h, w, h);
+    }
+}
 
 // --- EVENT LISTENERS ---
 function initialize() {
