@@ -171,13 +171,15 @@ function renderTemplate() {
   }
 
   // Kredit Foto
-if (kreditInput.value) {
+  const kreditColorInput = document.getElementById('kreditColor');
+
+  if (kreditInput.value) {
   ctx.save();
   const kreditY = logoMedsosBottomY > 0 ? logoMedsosBottomY + 50 : canvas.height - 100;
   ctx.translate(canvas.width - 50, kreditY);
   ctx.rotate(-Math.PI / -2);
   ctx.textAlign = 'right';
-  ctx.fillStyle = kreditColorInput.value || '#000000'; // pakai warna pilihan
+  ctx.fillStyle = kreditColorInput.value || '#000000'; // hitam / putih
   ctx.font = 'bold 18px Metropolis';
   ctx.fillText(kreditInput.value, 350, 30);
   ctx.restore();
@@ -186,6 +188,7 @@ if (kreditInput.value) {
 [kutipanInput, namaInput, jabatanInput, kreditInput, kreditColorInput, quoteYSlider]
   .forEach(el => {
     el.addEventListener('input', renderTemplate);
+    el.addEventListener('change', renderTemplate); // untuk select
   });
 
   // --- KONTEN KUTIPAN ---
