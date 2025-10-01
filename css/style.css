@@ -10,7 +10,6 @@
   font-style: normal;
   src: url('assets/proxima-nova-italic.woff2') format('woff2');
 }
-
 @font-face {
   font-family: 'Proxima Nova';
   font-weight: bold;
@@ -18,12 +17,92 @@
   src: url('assets/proxima-nova-bold.woff2') format('woff2');
 }
 
-h1{margin:0 0 12px;font-size:22px}
-.controls, .slider-controls {display:flex;flex-direction:column;gap:12px;margin-top:12px}
-.controls div, .slider-controls div {display:flex;flex-direction:column;gap:4px;}
-label{font-weight:bold;font-size:14px;margin-bottom:2px;}
-button,input,textarea{padding:8px 12px;border-radius:8px;border:1px solid #ddd;background:#fff;font-family:inherit;font-size:14px;width:100%;box-sizing:border-box;}
-textarea{min-height:80px;resize:vertical}
-.canvas-container{margin-top:20px;border:1px solid #ddd;cursor:grab; width: 1080px; max-width: 100%;}
-.canvas-container canvas{width: 100%; height: auto;}
-.canvas-container.grabbing{cursor:grabbing;}
+body {
+  font-family: 'Proxima Nova', system-ui, sans-serif;
+  background: #fafafa;
+  margin: 0;
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+h1 {
+  margin: 0 0 12px;
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.controls,
+.slider-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.controls div,
+.slider-controls div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+label {
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 2px;
+  color: #333;
+}
+
+button,
+input,
+textarea {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+button {
+  background: #007cbc;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+button:hover {
+  background: #005a8f;
+}
+
+textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.canvas-container {
+  margin-top: 20px;
+  border: 1px solid #ddd;
+  cursor: grab;
+  width: 1080px;
+  max-width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  background: #fff;
+}
+
+.canvas-container canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+
+.canvas-container.grabbing {
+  cursor: grabbing;
+}
