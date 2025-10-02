@@ -80,25 +80,34 @@ function renderTemplate() {
     
     // Hapus konten Canvas sebelumnya
     ctx.clearRect(0, 0, canvas.width, canvas.height); 
-
-    // 1. Latar belakang (Hanya tampil jika tidak ada foto)
-    if (!appState.photo) {
-        ctx.fillStyle = "#FAF9F6";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-    }
+    const frameMargin = 100;
     
-    // 2. Gambar Foto (FULL BACKGROUND) - Digambar di lapisan kedua
+    // 1. Latar belakang kanvas penuh (putih/warna default)
+    ctx.fillStyle = "#FAF9F6";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // 2. Gambar Bingkai Kotak Hitam (Frame)
+    // Sekarang digambar di lapisan rendah, JADI FOTO AKAN MENUTUPINYA.
+    ctx.strokeStyle = "#000000";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(
+        frameMargin,
+        frameMargin,
+        canvas.width - frameMargin * 2,
+        canvas.height - frameMargin * 2
+    );
+
+    // 3. Gambar Foto (FULL BACKGROUND) - Digambar di atas Bingkai Kotak Hitam
     if (appState.photo) {
         const img = appState.photo;
         
-        // Hitung skala dasar agar gambar mengisi seluruh Canvas (Cover)
+        // Hitung skala dasar (Cover)
         const baseScale = Math.max(
           canvas.width / img.width,
           canvas.height / img.height
         );
         
         const scale = baseScale * appState.zoom; 
-
         const drawW = img.width * scale;
         const drawH = img.height * scale;
 
@@ -116,14 +125,16 @@ function renderTemplate() {
   const quoteBlockYStart = parseInt(quoteYSlider.value, 10);
   let currentY = quoteBlockYStart;
     
-    // 3. Logo kanan atas
+    // 4. Konten Teks dan Logo (Di atas foto)
+
+    // Logo kanan atas
   if (logoKoranJawaPos.complete && logoKoranJawaPos.naturalWidth > 0) {
     const w = 235;
     const h = 69;
     ctx.drawImage(logoKoranJawaPos, canvas.width - w - 50, 50, w, h);
   }
 
-  // 4. Logo medsos vertikal
+  // Logo medsos vertikal
   let logoMedsosBottomY = 0;
   if (logoMedsosVertikal.complete && logoMedsosVertikal.naturalWidth > 0) {
     const baseHeight = 400;
@@ -140,7 +151,7 @@ function renderTemplate() {
     logoMedsosBottomY = y + h;
   }
 
-  // 5. Kredit Foto
+  // Kredit Foto
   if (kreditInput.value) {
         ctx.save();
         const kreditY = logoMedsosBottomY > 0 ? logoMedsosBottomY + 50 : canvas.height - 100;
@@ -153,7 +164,7 @@ function renderTemplate() {
         ctx.restore();
     }
 
-  // 6. Ikon kutip
+  // Ikon kutip
   if (ikonKutip.complete && ikonKutip.naturalWidth > 0) {
     const w = 140;
     const h = ikonKutip.naturalHeight * (w / ikonKutip.naturalWidth);
@@ -162,7 +173,7 @@ function renderTemplate() {
 
   currentY += 60;
 
-  // 7. Isi kutipan 
+  // Isi kutipan 
   const kutipanText =
     kutipanInput.value ||
     "Isi kutipan. Di sini adalah isi kutipan. Di sini adalah isi kutipan.";
@@ -183,7 +194,7 @@ function renderTemplate() {
   
   currentY += 20;
 
-  // 8. Nama 
+  // Nama 
   currentY = drawMultilineText(
     namaInput.value || "Nama",
     margin,
@@ -215,16 +226,7 @@ function renderTemplate() {
     ctx.drawImage(logoJPBiru, 0, canvas.height - h, w, h);
   }
 
-    // 11. Bingkai (Frame) FINAL: Digambar paling akhir agar selalu terlihat di atas foto
-    const frameMargin = 100;
-    ctx.strokeStyle = "#000000";
-    ctx.lineWidth = 1;
-    ctx.strokeRect(
-        frameMargin,
-        frameMargin,
-        canvas.width - frameMargin * 2,
-        canvas.height - frameMargin * 2
-    );
+    // Catatan: Bingkai sudah digambar di Langkah 2 (sebelum foto).
 }
 
 // --- EVENT LISTENERS ---
