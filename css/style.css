@@ -1,5 +1,4 @@
 /* === FONT FACE === */
-/* Asumsi: proxima-nova-regular.woff2 adalah file font normal */
 @font-face {
   font-family: 'Proxima Nova';
   font-weight: normal;
@@ -33,9 +32,9 @@ body {
 
 .card {
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Kontrol dan Canvas diletakkan di bawah H1 */
     align-items: center; 
-    max-width: 1080px; 
+    max-width: 1400px; /* Tambahkan lebar maksimal agar ada ruang untuk kontrol dan canvas */
     width: 100%;
 }
 
@@ -46,7 +45,42 @@ h1 {
   text-align: center;
 }
 
-/* Styling untuk judul pengelompokan (H2) di form */
+/* --- PERBAIKAN TATA LETAK UTAMA --- */
+
+/* Wrapper untuk Controls di sebelah kiri (Baru) */
+.controls-container {
+    display: flex;
+    flex-direction: column;
+    /* Lebar maksimum agar cocok dengan input */
+    width: 100%; 
+    max-width: 400px; 
+    margin-bottom: 20px;
+}
+
+/* Mengelompokkan Kontrol dan Canvas secara horizontal pada layar lebar */
+.card {
+    /* ... (Tetap column di atas) ... */
+}
+/* Mengelompokkan semua konten selain H1 agar berdampingan */
+body > .card {
+    display: flex;
+    flex-direction: column; /* Tetap kolom untuk H1 di atas */
+}
+
+/* Tambahkan wrapper jika Anda ingin berdampingan: */
+/*
+.main-content-wrapper {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 1400px;
+    margin-top: 20px;
+}
+*/
+
+/* --- Styling Tambahan untuk UX --- */
+
 .card h2 {
     margin: 20px 0 10px;
     font-size: 16px;
@@ -55,15 +89,9 @@ h1 {
     border-bottom: 1px solid #eee;
     padding-bottom: 4px;
     width: 100%;
-    max-width: 400px;
     text-align: left;
 }
 
-.controls-group {
-    width: 100%;
-    max-width: 400px;
-    margin-bottom: 15px;
-}
 
 /* === FORM CONTROL === */
 .controls,
@@ -72,7 +100,6 @@ h1 {
   flex-direction: column;
   gap: 12px;
   width: 100%;
-  max-width: 400px; /* Batasi lebar formulir */
 }
 
 .controls div,
@@ -130,7 +157,7 @@ textarea {
   border: 1px solid #ddd;
   cursor: grab;
   width: 1080px;
-  max-width: 90vw; /* Lebih responsif pada layar kecil */
+  max-width: 90vw; 
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
   background: #fff;
