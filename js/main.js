@@ -10,7 +10,7 @@ const kutipanInput = document.getElementById("kutipanInput");
 const namaInput = document.getElementById("namaInput");
 const jabatanInput = document.getElementById("jabatanInput");
 const kreditInput = document.getElementById("kreditInput");
-const kreditColorInput = document.getElementById('kreditColor'); // Variabel global yang benar
+const kreditColorInput = document.getElementById('kreditColor');
 
 const downloadBtn = document.getElementById("download");
 const canvasContainer = document.getElementById("canvasContainer");
@@ -38,37 +38,33 @@ const appState = {
 };
 
 // --- Fungsi Bantuan ---
-
-// Fungsi ini mempertahankan fungsionalitas aslinya, namun kita akan menggunakan drawMultilineText untuk Kutipan.
 function getWrappedLines(text, maxWidth, font) {
-  ctx.font = font;
-  const lines = [];
-  const paragraphs = String(text || "").split(/\n/);
+  ctx.font = font;
+  const lines = [];
+  const paragraphs = String(text || "").split(/\n/);
 
-  for (const paragraph of paragraphs) {
-    const words = paragraph.split(" ");
-    let currentLine = words[0] || "";
+  for (const paragraph of paragraphs) {
+    const words = paragraph.split(" ");
+    let currentLine = words[0] || "";
 
-    for (let i = 1; i < words.length; i++) {
-      const word = words[i];
-      const width = ctx.measureText(currentLine + " " + word).width;
+    for (let i = 1; i < words.length; i++) {
+      const word = words[i];
+      const width = ctx.measureText(currentLine + " " + word).width;
 
-      if (width < maxWidth) {
-        currentLine += " " + word;
-      } else {
-        lines.push(currentLine);
-        currentLine = word;
-      }
-    }
+      if (width < maxWidth) {
+        currentLine += " " + word;
+      } else {
+        lines.push(currentLine);
+        currentLine = word;
+      }
+    }
 
-    lines.push(currentLine);
-  }
+    lines.push(currentLine);
+  }
 
-  return lines;
+  return lines;
 }
 
-
-// Fungsi untuk menggambar teks multi-baris dan menangani baris baru (\n)
 function drawMultilineText(text, x, y, font, color, lineHeight, maxWidth) {
   ctx.font = font;
   ctx.fillStyle = color;
@@ -79,12 +75,6 @@ function drawMultilineText(text, x, y, font, color, lineHeight, maxWidth) {
   for (const paragraph of paragraphs) {
     const words = paragraph.split(" ");
     let currentLine = words[0] || "";
-
-    if (paragraph.trim() === "") {
-        // Tambahkan baris kosong untuk \n
-        offsetY += lineHeight;
-        continue;
-    }
 
     for (let i = 1; i < words.length; i++) {
       const word = words[i];
@@ -125,18 +115,14 @@ function renderTemplate() {
 
   // Foto
   if (appState.photo) {
-    ctx.save(); // Simpan state Canvas saat ini
-
-    // Mulai path baru untuk area clipping
-    ctx.beginPath();
-    ctx.rect(
+    ctx.fillStyle = "#FAF9F6";
+    ctx.fillRect(
       frameMargin,
       frameMargin,
       canvas.width - frameMargin * 2,
       canvas.height - frameMargin * 2
     );
-    ctx.clip(); // Potong semua gambar berikutnya agar hanya terlihat di dalam area rect ini
-    
+
     const img = appState.photo;
     const baseScale = Math.max(
       (canvas.width - frameMargin * 2) / img.width,
@@ -158,7 +144,6 @@ function renderTemplate() {
       appState.offset.y;
 
     ctx.drawImage(img, posX, posY, drawW, drawH);
-    ctx.restore(); // Kembalikan state Canvas sebelumnya (menghapus clipping path)
   }
 
   // Logo kanan atas
@@ -186,19 +171,25 @@ function renderTemplate() {
   }
 
   // Kredit Foto
-  if (kreditInput.value) { // Menggunakan variabel global kreditColorInput
-    ctx.save();
-    const kreditY = logoMedsosBottomY > 0 ? logoMedsosBottomY + 50 : canvas.height - 100;
-    ctx.translate(canvas.width - 50, kreditY);
-    ctx.rotate(Math.PI / 2); // Perbaikan: Rotasi 90 derajat searah jarum jam
-    ctx.textAlign = 'right';
-    ctx.fillStyle = kreditColorInput.value || '#000000'; // hitam / putih
-    ctx.font = 'bold 18px Metropolis';
-    ctx.fillText(kreditInput.value, 350, 30);
-    ctx.restore();
+  const kreditColorInput = document.getElementById('kreditColor');
+
+  if (kreditInput.value) {
+  ctx.save();
+  const kreditY = logoMedsosBottomY > 0 ? logoMedsosBottomY + 50 : canvas.height - 100;
+  ctx.translate(canvas.width - 50, kreditY);
+  ctx.rotate(-Math.PI / -2);
+  ctx.textAlign = 'right';
+  ctx.fillStyle = kreditColorInput.value || '#000000'; // hitam / putih
+  ctx.font = 'bold 18px Metropolis';
+  ctx.fillText(kreditInput.value, 350, 30);
+  ctx.restore();
 }
 
-// --- Hapus Event Listener Ganda di sini ---
+[kutipanInput, namaInput, jabatanInput, kreditInput, kreditColorInput, quoteYSlider]
+  .forEach(el => {
+    el.addEventListener('input', renderTemplate);
+    el.addEventListener('change', renderTemplate); // untuk select
+  });
 
   // --- KONTEN KUTIPAN ---
   const margin = 160;
@@ -213,25 +204,28 @@ function renderTemplate() {
 
   currentY += 60;
 
-  // Isi kutipan (Menggunakan drawMultilineText)
+  // Isi kutipan
   const kutipanText =
     kutipanInput.value ||
     "Isi kutipan. Di sini adalah isi kutipan. Di sini adalah isi kutipan.";
 
   const kutipanFont = '40pt "DM Serif Display"';
   const kutipanLineHeight = 50;
-  const kutipanMaxWidth = canvas.width - margin * 2 - 100;
-  
-  currentY = drawMultilineText(
+
+  const kutipanLines = getWrappedLines(
     kutipanText,
-    margin,
-    currentY,
-    kutipanFont,
-    "#000000",
-    kutipanLineHeight,
-    kutipanMaxWidth
+    canvas.width - margin * 2 - 100,
+    kutipanFont
   );
-  
+
+  ctx.fillStyle = "#000000";
+  ctx.font = kutipanFont;
+
+  kutipanLines.forEach((line, index) => {
+    ctx.fillText(line, margin, currentY + index * kutipanLineHeight);
+  });
+
+  currentY += kutipanLines.length * kutipanLineHeight;
   currentY += 20;
 
   // Nama (lineHeight lebih rapat antar baris)
@@ -269,14 +263,16 @@ function renderTemplate() {
 
 // --- EVENT LISTENERS ---
 function initialize() {
-  // Pendaftaran Event Listener di sini SAJA
-  [kutipanInput, namaInput, jabatanInput, kreditInput, quoteYSlider, zoomSlider].forEach(el => {
+  [kutipanInput, namaInput, jabatanInput, kreditInput, quoteYSlider].forEach(el => {
     el.addEventListener('input', renderTemplate);
   });
 
-  // Event change khusus untuk select
+  // tambahan untuk dropdown warna kredit
   kreditColorInput.addEventListener('change', renderTemplate);
   
+  // ... sisanya tetap
+}
+
   // Upload foto
   uploadPhotoInput.addEventListener("change", (e) => {
     const file = e.target.files && e.target.files[0];
@@ -287,10 +283,6 @@ function initialize() {
       const newImg = new Image();
       newImg.onload = () => {
         appState.photo = newImg;
-        // Reset zoom dan offset saat foto baru diunggah
-         appState.zoom = 1.0;
-         zoomSlider.value = 1.0;
-         appState.offset = { x: 0, y: 0 };
         renderTemplate();
       };
       newImg.src = ev.target.result;
@@ -298,7 +290,13 @@ function initialize() {
     reader.readAsDataURL(file);
   });
 
-  // Download hasil (Ditambahkan setTimeout untuk URL.revokeObjectURL yang lebih aman)
+  // Zoom foto
+  zoomSlider.addEventListener("input", (e) => {
+    appState.zoom = parseFloat(e.target.value);
+    renderTemplate();
+  });
+
+  // Download hasil
   downloadBtn.addEventListener("click", () => {
     const a = document.createElement("a");
     a.href = canvas.toDataURL("image/jpeg", 0.92);
@@ -306,11 +304,7 @@ function initialize() {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    
-    // Delay revokeObjectURL
-    setTimeout(() => {
-      URL.revokeObjectURL(a.href);
-    }, 100);
+    URL.revokeObjectURL(a.href);
   });
 
   // Drag foto
