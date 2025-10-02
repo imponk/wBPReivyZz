@@ -1,5 +1,5 @@
 /* === FONT FACE === */
-/* Pastikan font path sudah benar */
+/* Pastikan path font Proxima Nova sudah benar */
 @font-face {
   font-family: 'Proxima Nova';
   font-weight: normal;
@@ -26,7 +26,7 @@ body {
   font-family: 'Proxima Nova', system-ui, sans-serif;
   background: #fafafa;
   margin: 0;
-  padding: 24px;
+  padding: 24px 10px; /* Padding lebih kecil di mobile */
   display: flex;
   justify-content: center;
 }
@@ -46,20 +46,21 @@ h1 {
   text-align: center;
 }
 
-/* --- PERBAIKAN TATA LETAK UTAMA: Wrapper Horizontal --- */
+/* --- TATA LETAK UTAMA: MOBILE FIRST (BERTUMPUK) --- */
 
 .main-content-wrapper {
     display: flex;
-    gap: 30px; 
-    align-items: flex-start; /* Sejajar dari atas */
+    flex-direction: column; /* Default: Bertumpuk di mobile */
+    gap: 20px;
+    align-items: center; /* Pusatkan controls dan canvas */
     width: 100%;
     margin-top: 15px;
-    justify-content: center;
 }
 
 .controls-container {
     display: flex;
     flex-direction: column;
+    /* Batasi lebar controls agar rapi */
     width: 100%; 
     max-width: 400px; 
 }
@@ -138,13 +139,11 @@ textarea {
 
 /* === CANVAS === */
 .canvas-container {
-  /* Margin dihilangkan karena sudah diatur oleh main-content-wrapper gap */
   margin-top: 0; 
   border: 1px solid #ddd;
   cursor: grab;
-  /* Menggunakan max-width agar lebih responsif di layar kecil */
-  width: 100%;
-  max-width: 400px; /* Di layar kecil, controls dan canvas akan bertumpuk, ini membatasi lebar canvas */
+  width: 100%; /* Gunakan lebar penuh di mobile */
+  max-width: 400px; /* Tapi batasi agar tidak terlalu lebar di mobile/tablet */
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
   background: #fff;
@@ -161,11 +160,21 @@ textarea {
   cursor: grabbing;
 }
 
-/* Media Query untuk layar desktop/lebar */
+/* --- MEDIA QUERY: LAYAR LEBAR (BERDAMPINGAN) --- */
 @media (min-width: 900px) {
+    body {
+        padding: 30px;
+    }
+    
+    .main-content-wrapper {
+        flex-direction: row; /* Berdampingan di desktop */
+        align-items: flex-start; /* Sejajar dari atas */
+        justify-content: center;
+    }
+    
     .canvas-container {
-        /* Mengatur lebar aktual Canvas agar terlihat jelas di layar besar */
-        max-width: 400px; /* Agar Canvas tidak terlalu lebar di desktop */
-        width: 400px;
+        /* Set Canvas ke ukuran default 1080px (diredimensioning by width: 400px) */
+        width: 400px; 
+        max-width: 400px;
     }
 }
