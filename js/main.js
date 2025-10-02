@@ -95,8 +95,11 @@ function renderTemplate() {
     if (appState.photo) {
         const img = appState.photo;
         
+        // PERBAIKAN ZOOM: Ambil nilai slider sebagai angka
+        const currentZoom = parseFloat(zoomSlider.value); 
+        
         const baseScale = Math.max(canvas.width / img.width, canvas.height / img.height);
-        const scale = baseScale * appState.zoom; 
+        const scale = baseScale * currentZoom; 
         const drawW = img.width * scale;
         const drawH = img.height * scale;
         
@@ -137,7 +140,7 @@ function renderTemplate() {
     logoMedsosBottomY = y + h;
   }
 
-  // Kredit Foto (diputar) - Bug fixed: parameter fillText
+  // Kredit Foto (diputar)
   if (kreditInput.value) {
         ctx.save();
         const kreditY = logoMedsosBottomY > 0 ? logoMedsosBottomY + 50 : canvas.height - 100;
@@ -146,7 +149,7 @@ function renderTemplate() {
         ctx.textAlign = 'right';
         ctx.fillStyle = kreditColorInput.value || '#000000'; 
         ctx.font = 'bold 18px "Proxima Nova"'; 
-        ctx.fillText(kreditInput.value, 350, 30); // Corrected order: text, x, y
+        ctx.fillText(kreditInput.value, 350, 30);
         ctx.restore();
     }
 
@@ -200,8 +203,8 @@ function initialize() {
             const newImg = new Image();
             newImg.onload = () => {
                 appState.photo = newImg;
-                appState.zoom = 1.0;
-                zoomSlider.value = 1.0;
+                // Tetapkan nilai slider zoom ke 1.0 (default) saat foto baru diunggah
+                zoomSlider.value = 1.0; 
                 appState.offset = { x: 0, y: 0 };
                 renderTemplate();
             };
