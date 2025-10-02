@@ -3,17 +3,22 @@ body {
     padding: 0;
     background-color: #f4f4f4;
     font-family: Arial, sans-serif;
+    /* Pastikan Body mengambil tinggi penuh viewport */
+    min-height: 100vh; 
 }
 
-/* Container Utama Aplikasi */
+/* Container Utama Aplikasi - Fokus: Membuat konten terpusat dan terlihat */
 .app-container {
     display: flex;
     max-width: 1400px;
-    margin: 30px auto;
+    /* Ubah margin agar terlihat di tengah dan punya ruang */
+    margin: 30px auto; 
     background-color: #fff;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     overflow: hidden;
+    /* Pastikan tinggi minimal ada untuk menampung canvas/controls */
+    min-height: 800px; 
 }
 
 /* Kontainer Canvas */
@@ -34,19 +39,20 @@ body {
     border: 1px solid #ddd;
     display: block;
     max-width: 100%;
+    /* Atur tinggi maksimal agar canvas tidak terlalu besar */
+    max-height: 700px; 
     height: auto;
 }
 
 /* ------------------------------------------- */
-/* Styling Controls Container (Perbaikan UI/UX) */
+/* Styling Controls Container (UI/UX) */
 /* ------------------------------------------- */
 .controls-container {
-    width: 350px; /* Lebar tetap untuk kontrol */
-    min-height: 800px;
+    width: 350px; 
     padding: 20px;
     background-color: #fafafa; 
     border-right: 1px solid #ddd;
-    overflow-y: auto; 
+    overflow-y: auto; /* Memungkinkan scroll pada panel kontrol */
     font-family: 'Proxima Nova', sans-serif;
 }
 
@@ -114,7 +120,7 @@ input[type="range"] {
     height: 8px;
     background: #d3d3d3;
     outline: none;
-    opacity: 0.7;
+    opacity: 0.9;
     transition: opacity .15s;
     border-radius: 4px;
 }
@@ -133,7 +139,7 @@ input[type="range"]::-webkit-slider-thumb {
 #download {
     width: 100%;
     padding: 15px;
-    background-color: #000000; /* Warna hitam khas JP */
+    background-color: #000000; 
     color: white;
     border: none;
     border-radius: 4px;
@@ -146,13 +152,6 @@ input[type="range"]::-webkit-slider-thumb {
 
 #download:hover {
     background-color: #333333;
-}
-
-/* Styling Select agar lebih rapi */
-select {
-    height: 40px;
-    background: #fff;
-    /* Hilangkan panah default, tambahkan panah kustom jika perlu */
 }
 
 hr {
