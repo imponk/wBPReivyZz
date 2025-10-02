@@ -87,10 +87,11 @@ function renderTemplate() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // ******************************************************
-    // *** 2. LAPISAN 2: BINGKAI KOTAK HITAM ***
+    // *** 2. LAPISAN 2: BINGKAI KOTAK HITAM (Garis Tepi) ***
     // ******************************************************
+    const lineWidth = 1;
     ctx.strokeStyle = "#000000";
-    ctx.lineWidth = 1;
+    ctx.lineWidth = lineWidth;
     ctx.strokeRect(
         frameMargin,
         frameMargin,
@@ -105,11 +106,11 @@ function renderTemplate() {
     if (appState.photo) {
         ctx.save(); // Simpan konteks sebelum clipping
 
-        // Tentukan area clipping (area di dalam bingkai)
-        const frameX = frameMargin;
-        const frameY = frameMargin;
-        const frameW = canvas.width - frameMargin * 2; // 880
-        const frameH = canvas.height - frameMargin * 2; // 880
+        // Tentukan area clipping: Masuk ke dalam garis bingkai (setengah lineWidth)
+        const frameX = frameMargin + lineWidth / 2;
+        const frameY = frameMargin + lineWidth / 2;
+        const frameW = canvas.width - frameMargin * 2 - lineWidth; // 880 - 1 = 879
+        const frameH = canvas.height - frameMargin * 2 - lineWidth; // 880 - 1 = 879
         
         ctx.beginPath();
         ctx.rect(frameX, frameY, frameW, frameH);
@@ -131,7 +132,7 @@ function renderTemplate() {
             ctx.drawImage(img, posX, posY, drawW, drawH);
         }
         
-        ctx.restore(); // Kembalikan konteks, menghapus clipping mask
+        ctx.restore(); // Kembalikan konteks
     }
     // ******************************************************
     
@@ -141,7 +142,6 @@ function renderTemplate() {
   let currentY = quoteBlockYStart;
     
     // 4. LAPISAN 4 (PALING ATAS): Konten Teks dan Logo
-    // (Semua kode di bawah ini akan digambar di atas Foto dan Bingkai)
 
     // Logo kanan atas
   if (logoKoranJawaPos.complete && logoKoranJawaPos.naturalWidth > 0) {
@@ -215,7 +215,6 @@ function renderTemplate() {
 }
 
 // --- EVENT LISTENERS ---
-// (Bagian ini tidak berubah)
 function initialize() {
     
     // Pendaftaran Event Listener untuk input teks, slider, dan select
@@ -259,7 +258,7 @@ function initialize() {
         }, 100);
     });
 
-    // Drag foto (Mouse Down, Move, Up) - Logika Dragging juga diubah untuk Frame Area
+    // Drag foto (Mouse Down, Move, Up) - Logika Dragging
     canvas.addEventListener("mousedown", (e) => {
         e.preventDefault(); 
         if (!appState.photo) return;
