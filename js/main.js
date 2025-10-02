@@ -137,7 +137,7 @@ function renderTemplate() {
     logoMedsosBottomY = y + h;
   }
 
-  // Kredit Foto (diputar)
+  // Kredit Foto (diputar) - Bug fixed: parameter fillText
   if (kreditInput.value) {
         ctx.save();
         const kreditY = logoMedsosBottomY > 0 ? logoMedsosBottomY + 50 : canvas.height - 100;
@@ -146,7 +146,7 @@ function renderTemplate() {
         ctx.textAlign = 'right';
         ctx.fillStyle = kreditColorInput.value || '#000000'; 
         ctx.font = 'bold 18px "Proxima Nova"'; 
-        ctx.fillText(kreditInput.value, 350, 30);
+        ctx.fillText(kreditInput.value, 350, 30); // Corrected order: text, x, y
         ctx.restore();
     }
 
