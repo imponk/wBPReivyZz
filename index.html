@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jawa Pos Kutipan Generator</title>
     <link rel="stylesheet" href="style.css">
-    
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap" rel="stylesheet">
-    
     </head>
 <body>
 
@@ -17,64 +15,43 @@
             
             <h1>Jawa Pos Quote Generator</h1>
 
-            <fieldset>
-                <legend>Konten Kutipan</legend>
-                
-                <div class="control-group">
-                    <label for="kutipanInput">Kutipan</label>
-                    <textarea id="kutipanInput" rows="4" placeholder="Masukkan kutipan di sini..."></textarea>
-                </div>
-                
-                <div class="control-group">
-                    <label for="namaInput">Nama Tokoh</label>
-                    <input type="text" id="namaInput" placeholder="Contoh: Bima Sakti" />
-                </div>
+            <h3>Konten Kutipan</h3>
+            <label for="kutipanInput">Kutipan:</label>
+            <textarea id="kutipanInput" rows="4" placeholder="Masukkan kutipan di sini..."></textarea>
+            
+            <label for="namaInput">Nama Tokoh:</label>
+            <input type="text" id="namaInput" placeholder="Contoh: Bima Sakti" />
 
-                <div class="control-group">
-                    <label for="jabatanInput">Jabatan/Keterangan</label>
-                    <input type="text" id="jabatanInput" placeholder="Contoh: Kepala Dinas Pendidikan Jatim" />
-                </div>
-            </fieldset>
+            <label for="jabatanInput">Jabatan/Keterangan:</label>
+            <input type="text" id="jabatanInput" placeholder="Contoh: Kepala Dinas Pendidikan Jatim" />
+            
+            <hr>
 
-            <fieldset>
-                <legend>Pengaturan Foto & Posisi</legend>
-                
-                <div class="control-group">
-                    <label for="uploadPhoto">Upload Foto Latar Belakang</label>
-                    <input type="file" id="uploadPhoto" accept="image/*" />
-                </div>
-                
-                <div class="control-group">
-                    <label for="zoomSlider">Zoom Foto (1.00)</label>
-                    <input type="range" id="zoomSlider" min="1.0" max="3.0" step="0.05" value="1.0" />
-                </div>
-                
-                <div class="control-group">
-                    <label for="quoteYSlider">Posisi Kutipan Vertikal (Y: 300)</label>
-                    <input type="range" id="quoteYSlider" min="150" max="650" step="10" value="300" />
-                </div>
-            </fieldset>
+            <h3>Pengaturan Foto & Posisi</h3>
+            <label for="uploadPhoto">Upload Foto Latar Belakang:</label>
+            <input type="file" id="uploadPhoto" accept="image/*" />
+            
+            <label for="zoomSlider">Zoom Foto:</label>
+            <input type="range" id="zoomSlider" min="1.0" max="3.0" step="0.05" value="1.0" />
+            
+            <label for="quoteYSlider">Posisi Kutipan Vertikal (Y):</label>
+            <input type="range" id="quoteYSlider" min="150" max="650" step="10" value="300" />
+            
+            <hr>
 
-            <fieldset>
-                <legend>Kredit Foto & Download</legend>
-                
-                <div class="control-group">
-                    <label for="kreditInput">Kredit Foto (Vertikal)</label>
-                    <input type="text" id="kreditInput" placeholder="Contoh: FOTO: JAWA POS/FADIL" />
-                </div>
-                
-                <div class="control-group">
-                    <label for="kreditColor">Warna Teks Kredit</label>
-                    <select id="kreditColor">
-                        <option value="#000000">Hitam</option>
-                        <option value="#FFFFFF">Putih</option>
-                    </select>
-                </div>
-                
-                <hr>
-                
-                <button id="download">DOWNLOAD HASIL (JPG)</button>
-            </fieldset>
+            <h3>Kredit Foto & Download</h3>
+            <label for="kreditInput">Kredit Foto (Vertikal):</label>
+            <input type="text" id="kreditInput" placeholder="Contoh: FOTO: JAWA POS/FADIL" />
+            
+            <label for="kreditColor">Warna Teks Kredit:</label>
+            <select id="kreditColor">
+                <option value="#000000">Hitam</option>
+                <option value="#FFFFFF">Putih</option>
+            </select>
+            
+            <hr>
+            
+            <button id="download">DOWNLOAD HASIL (JPG)</button>
         </div>
 
         <div id="canvasContainer" class="canvas-container">
