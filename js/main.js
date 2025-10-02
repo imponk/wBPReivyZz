@@ -7,8 +7,8 @@ const zoomSlider = document.getElementById("zoomSlider");
 const quoteYSlider = document.getElementById("quoteYSlider");
 
 const kutipanInput = document.getElementById("kutipanInput");
-const namaInput = document.getElementById("namaInput");
-const jabatanInput = document.getElementById("jabatanInput");
+const namaInput = document.getElementById("namaInput"); // Sekarang adalah textarea
+const jabatanInput = document.getElementById("jabatanInput"); // Sekarang adalah textarea
 const kreditInput = document.getElementById("kreditInput");
 const kreditColorInput = document.getElementById('kreditColor');
 
@@ -78,22 +78,32 @@ function drawMultilineText(text, x, y, font, color, lineHeight, maxWidth) {
 // --- FUNGSI RENDER UTAMA ---
 function renderTemplate() {
     
+    // Hapus konten Canvas sebelumnya
+    ctx.clearRect(0, 0, canvas.width, canvas.height); 
+
     // 1. Gambar Foto (FULL BACKGROUND)
     if (appState.photo) {
         const img = appState.photo;
+        
+        // Hitung skala dasar agar gambar mengisi seluruh Canvas (Cover)
         const baseScale = Math.max(
           canvas.width / img.width,
           canvas.height / img.height
         );
-        const scale = baseScale * appState.zoom;
+        
+        const scale = baseScale * appState.zoom; // Terapkan zoom dari slider
 
         const drawW = img.width * scale;
         const drawH = img.height * scale;
 
+        // Hitung posisi tengah, lalu tambahkan offset dari drag
         const posX = ((canvas.width - drawW) / 2) + appState.offset.x;
         const posY = ((canvas.height - drawH) / 2) + appState.offset.y;
 
-        ctx.drawImage(img, posX, posY, drawW, drawH);
+        // Validasi dan Gambar
+        if (!isNaN(posX) && !isNaN(posY) && !isNaN(drawW) && !isNaN(drawH)) {
+            ctx.drawImage(img, posX, posY, drawW, drawH);
+        }
     }
     
     // 2. Latar belakang (hanya tampil jika tidak ada foto)
@@ -124,7 +134,7 @@ function renderTemplate() {
         const BOX_HEIGHT = 450; 
         const BOX_WIDTH = canvas.width - 2 * margin;
 
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.75)'; // Latar belakang Putih 75% transparan
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
         ctx.fillRect(
             margin - PADDING, 
             quoteBlockYStart - PADDING,
@@ -200,7 +210,7 @@ function renderTemplate() {
   
   currentY += 20;
 
-  // Nama (lineHeight lebih rapat antar baris)
+  // Nama (Sekarang multi-baris)
   currentY = drawMultilineText(
     namaInput.value || "Nama",
     margin,
@@ -214,7 +224,7 @@ function renderTemplate() {
   // Jarak antar blok
   currentY += 6;
 
-  // Jabatan (lineHeight rapat)
+  // Jabatan (Sekarang multi-baris)
   currentY = drawMultilineText(
     jabatanInput.value || "Jabatan",
     margin,
@@ -237,26 +247,23 @@ function renderTemplate() {
 function initialize() {
     
     // Pendaftaran Event Listener untuk input teks dan penggeser posisi kutipan (quoteYSlider)
-    // Zoom Slider DIHAPUS dari sini agar memiliki listener terpisah
     [kutipanInput, namaInput, jabatanInput, kreditInput, quoteYSlider].forEach(el => {
         el.addEventListener('input', renderTemplate);
     });
 
-    // --- PERBAIKAN: Listener KHUSUS untuk Zoom Slider ---
+    // Listener KHUSUS untuk Zoom Slider (memperbarui state zoom)
     zoomSlider.addEventListener("input", (e) => {
-        appState.zoom = parseFloat(e.target.value); // Memperbarui appState.zoom
+        appState.zoom = parseFloat(e.target.value); 
         renderTemplate();
     });
-    // ---------------------------------------------------
-
+    
     // Event change khusus untuk select
     kreditColorInput.addEventListener('change', renderTemplate);
   
-    // --- PERBAIKAN: Mencegah Drag Membayang pada Canvas ---
+    // Mencegah Drag Membayang pada Canvas
     canvas.addEventListener("dragstart", (e) => {
         e.preventDefault(); 
     });
-    // --- AKHIR PERBAIKAN ---
 
     // Upload foto
     uploadPhotoInput.addEventListener("change", (e) => {
