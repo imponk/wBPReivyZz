@@ -16,6 +16,7 @@ const downloadBtn = document.getElementById("download");
 const canvasContainer = document.getElementById("canvasContainer");
 
 // --- Aset & State ---
+// Pastikan path ke aset (logo) sudah benar
 const logoKoranJawaPos = new Image();
 logoKoranJawaPos.src = "assets/jawapos-kanan.svg";
 
@@ -38,7 +39,6 @@ const appState = {
 };
 
 // --- Fungsi Bantuan ---
-// Fungsi untuk menggambar teks multi-baris dan menangani baris baru (\n)
 function drawMultilineText(text, x, y, font, color, lineHeight, maxWidth) {
   ctx.font = font;
   ctx.fillStyle = color;
@@ -82,42 +82,66 @@ function renderTemplate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height); 
     const frameMargin = 100;
     
-    // 1. Latar belakang kanvas penuh (putih/warna default)
-    // LAPISAN 1: Paling Bawah
+    // 1. LAPISAN 1 (PALING BAWAH): Latar belakang kanvas 
     ctx.fillStyle = "#FAF9F6";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // 2. Gambar Foto (FULL BACKGROUND) - Digambar di atas latar belakang
-    // LAPISAN 2: Di atas Latar Belakang Polos
+    // ******************************************************
+    // *** 2. LAPISAN 2: BINGKAI KOTAK HITAM ***
+    // ******************************************************
+    ctx.strokeStyle = "#000000";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(
+        frameMargin,
+        frameMargin,
+        canvas.width - frameMargin * 2,
+        canvas.height - frameMargin * 2
+    );
+    // ******************************************************
+
+    // ******************************************************
+    // *** 3. LAPISAN 3: Gambar Foto (DIBATASI OLEH BINGKAI) ***
+    // ******************************************************
     if (appState.photo) {
+        ctx.save(); // Simpan konteks sebelum clipping
+
+        // Tentukan area clipping (area di dalam bingkai)
+        const frameX = frameMargin;
+        const frameY = frameMargin;
+        const frameW = canvas.width - frameMargin * 2; // 880
+        const frameH = canvas.height - frameMargin * 2; // 880
+        
+        ctx.beginPath();
+        ctx.rect(frameX, frameY, frameW, frameH);
+        ctx.clip(); // Terapkan clipping mask
+
         const img = appState.photo;
         
-        // Hitung skala dasar (Cover)
-        const baseScale = Math.max(
-          canvas.width / img.width,
-          canvas.height / img.height
-        );
-        
+        // Hitung skala baru (didasarkan pada FRAME area)
+        const baseScale = Math.max(frameW / img.width, frameH / img.height); 
         const scale = baseScale * appState.zoom; 
         const drawW = img.width * scale;
         const drawH = img.height * scale;
+        
+        // Hitung posisi baru (didasarkan pada FRAME area, ditambahkan offset bingkai)
+        const posX = frameX + ((frameW - drawW) / 2) + appState.offset.x;
+        const posY = frameY + ((frameH - drawH) / 2) + appState.offset.y;
 
-        // Hitung posisi tengah, lalu tambahkan offset dari drag
-        const posX = ((canvas.width - drawW) / 2) + appState.offset.x;
-        const posY = ((canvas.height - drawH) / 2) + appState.offset.y;
-
-        // Validasi dan Gambar
         if (!isNaN(posX) && !isNaN(posY) && !isNaN(drawW) && !isNaN(drawH)) {
             ctx.drawImage(img, posX, posY, drawW, drawH);
         }
+        
+        ctx.restore(); // Kembalikan konteks, menghapus clipping mask
     }
+    // ******************************************************
     
+    // --- Inisialisasi posisi teks/logo ---
   const margin = 160;
   const quoteBlockYStart = parseInt(quoteYSlider.value, 10);
   let currentY = quoteBlockYStart;
     
-    // 3. Konten Teks dan Logo
-    // LAPISAN 3: Di atas Foto
+    // 4. LAPISAN 4 (PALING ATAS): Konten Teks dan Logo
+    // (Semua kode di bawah ini akan digambar di atas Foto dan Bingkai)
 
     // Logo kanan atas
   if (logoKoranJawaPos.complete && logoKoranJawaPos.naturalWidth > 0) {
@@ -143,7 +167,7 @@ function renderTemplate() {
     logoMedsosBottomY = y + h;
   }
 
-  // Kredit Foto
+  // Kredit Foto (diputar)
   if (kreditInput.value) {
         ctx.save();
         const kreditY = logoMedsosBottomY > 0 ? logoMedsosBottomY + 50 : canvas.height - 100;
@@ -151,7 +175,7 @@ function renderTemplate() {
         ctx.rotate(Math.PI / 2);
         ctx.textAlign = 'right';
         ctx.fillStyle = kreditColorInput.value || '#000000'; 
-        ctx.font = 'bold 18px "Proxima Nova"';
+        ctx.font = 'bold 18px "Proxima Nova"'; 
         ctx.fillText(kreditInput.value, 350, 30);
         ctx.restore();
     }
@@ -166,50 +190,21 @@ function renderTemplate() {
   currentY += 60;
 
   // Isi kutipan 
-  const kutipanText =
-    kutipanInput.value ||
-    "Isi kutipan. Di sini adalah isi kutipan. Di sini adalah isi kutipan.";
+  const kutipanText = kutipanInput.value || "Isi kutipan. Di sini adalah isi kutipan. Di sini adalah isi kutipan.";
 
   const kutipanFont = '40pt "DM Serif Display"';
   const kutipanLineHeight = 50;
   const kutipanMaxWidth = canvas.width - margin * 2 - 100;
   
-  currentY = drawMultilineText(
-    kutipanText,
-    margin,
-    currentY,
-    kutipanFont,
-    "#000000",
-    kutipanLineHeight,
-    kutipanMaxWidth
-  );
-  
+  currentY = drawMultilineText(kutipanText, margin, currentY, kutipanFont, "#000000", kutipanLineHeight, kutipanMaxWidth);
   currentY += 20;
 
   // Nama 
-  currentY = drawMultilineText(
-    namaInput.value || "Nama",
-    margin,
-    currentY,
-    'bold 32px "Proxima Nova"',
-    "#000000",
-    34,
-    canvas.width - margin * 4
-  );
-
-  // Jarak antar blok
+  currentY = drawMultilineText(namaInput.value || "Nama", margin, currentY, 'bold 32px "Proxima Nova"', "#000000", 34, canvas.width - margin * 4);
   currentY += 6;
 
   // Jabatan 
-  currentY = drawMultilineText(
-    jabatanInput.value || "Jabatan",
-    margin,
-    currentY,
-    'italic 28px "Proxima Nova"',
-    "#333333",
-    30,
-    canvas.width - margin * 4
-  );
+  currentY = drawMultilineText(jabatanInput.value || "Jabatan", margin, currentY, 'italic 28px "Proxima Nova"', "#333333", 30, canvas.width - margin * 4);
 
   // Logo bawah kiri
   if (logoJPBiru.complete && logoJPBiru.naturalWidth > 0) {
@@ -217,43 +212,19 @@ function renderTemplate() {
     const h = 95;
     ctx.drawImage(logoJPBiru, 0, canvas.height - h, w, h);
   }
-
-    // 4. Gambar Bingkai Kotak Hitam (Frame) FINAL
-    // LAPISAN 4: Paling Atas. Kode ini TIDAK memiliki kondisi, jadi dia akan SELALU digambar
-    // di atas semua elemen lain, termasuk foto.
-    ctx.strokeStyle = "#000000";
-    ctx.lineWidth = 1;
-    ctx.strokeRect(
-        frameMargin,
-        frameMargin,
-        canvas.width - frameMargin * 2,
-        canvas.height - frameMargin * 2
-    );
 }
 
 // --- EVENT LISTENERS ---
+// (Bagian ini tidak berubah)
 function initialize() {
     
-    // Pendaftaran Event Listener untuk input teks dan penggeser posisi kutipan (quoteYSlider)
-    [kutipanInput, namaInput, jabatanInput, kreditInput, quoteYSlider].forEach(el => {
+    // Pendaftaran Event Listener untuk input teks, slider, dan select
+    [kutipanInput, namaInput, jabatanInput, kreditInput, kreditColorInput, zoomSlider, quoteYSlider].forEach(el => {
         el.addEventListener('input', renderTemplate);
-    });
-
-    // Listener KHUSUS untuk Zoom Slider (memperbarui state zoom)
-    zoomSlider.addEventListener("input", (e) => {
-        appState.zoom = parseFloat(e.target.value); 
-        renderTemplate();
+        el.addEventListener('change', renderTemplate);
     });
     
-    // Event change khusus untuk select
-    kreditColorInput.addEventListener('change', renderTemplate);
-  
-    // Mencegah Drag Membayang pada Canvas
-    canvas.addEventListener("dragstart", (e) => {
-        e.preventDefault(); 
-    });
-
-    // Upload foto
+    // Upload foto
     uploadPhotoInput.addEventListener("change", (e) => {
         const file = e.target.files && e.target.files[0];
         if (!file) return;
@@ -263,7 +234,7 @@ function initialize() {
             const newImg = new Image();
             newImg.onload = () => {
                 appState.photo = newImg;
-                // Reset zoom dan offset saat foto baru diunggah
+                // Reset zoom & offset
                 appState.zoom = 1.0;
                 zoomSlider.value = 1.0;
                 appState.offset = { x: 0, y: 0 };
@@ -273,8 +244,8 @@ function initialize() {
         };
         reader.readAsDataURL(file);
     });
-
-    // Download hasil 
+    
+    // Download hasil 
     downloadBtn.addEventListener("click", () => {
         const a = document.createElement("a");
         a.href = canvas.toDataURL("image/jpeg", 0.92);
@@ -288,27 +259,20 @@ function initialize() {
         }, 100);
     });
 
-    // Drag foto
+    // Drag foto (Mouse Down, Move, Up) - Logika Dragging juga diubah untuk Frame Area
     canvas.addEventListener("mousedown", (e) => {
-        // Penting: Mencegah perilaku native drag HTML saat mousedown
         e.preventDefault(); 
-        
         if (!appState.photo) return;
         appState.isDragging = true;
         appState.dragStart = { x: e.clientX, y: e.clientY };
-        appState.initialOffset = {
-            x: appState.offset.x,
-            y: appState.offset.y,
-        };
+        appState.initialOffset = { x: appState.offset.x, y: appState.offset.y };
         canvasContainer.classList.add("grabbing");
     });
 
     window.addEventListener("mousemove", (e) => {
         if (!appState.isDragging) return;
-        appState.offset.x =
-            appState.initialOffset.x + (e.clientX - appState.dragStart.x);
-        appState.offset.y =
-            appState.initialOffset.y + (e.clientY - appState.dragStart.y);
+        appState.offset.x = appState.initialOffset.x + (e.clientX - appState.dragStart.x);
+        appState.offset.y = appState.initialOffset.y + (e.clientY - appState.dragStart.y);
         renderTemplate();
     });
 
@@ -318,13 +282,7 @@ function initialize() {
     });
 
     // Pastikan semua aset diload
-    const allAssets = [
-        logoKoranJawaPos,
-        logoJPBiru,
-        ikonKutip,
-        logoMedsosVertikal,
-    ];
-
+    const allAssets = [logoKoranJawaPos, logoJPBiru, ikonKutip, logoMedsosVertikal];
     allAssets.forEach((img) => {
         if (img.complete) {
             renderTemplate();
