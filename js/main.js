@@ -83,21 +83,12 @@ function renderTemplate() {
     const frameMargin = 100;
     
     // 1. Latar belakang kanvas penuh (putih/warna default)
+    // LAPISAN 1: Paling Bawah
     ctx.fillStyle = "#FAF9F6";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // 2. Gambar Bingkai Kotak Hitam (Frame)
-    // Sekarang digambar di lapisan rendah, JADI FOTO AKAN MENUTUPINYA.
-    ctx.strokeStyle = "#000000";
-    ctx.lineWidth = 1;
-    ctx.strokeRect(
-        frameMargin,
-        frameMargin,
-        canvas.width - frameMargin * 2,
-        canvas.height - frameMargin * 2
-    );
-
-    // 3. Gambar Foto (FULL BACKGROUND) - Digambar di atas Bingkai Kotak Hitam
+    // 2. Gambar Foto (FULL BACKGROUND) - Digambar di atas latar belakang
+    // LAPISAN 2: Di atas Latar Belakang Polos
     if (appState.photo) {
         const img = appState.photo;
         
@@ -125,7 +116,8 @@ function renderTemplate() {
   const quoteBlockYStart = parseInt(quoteYSlider.value, 10);
   let currentY = quoteBlockYStart;
     
-    // 4. Konten Teks dan Logo (Di atas foto)
+    // 3. Konten Teks dan Logo
+    // LAPISAN 3: Di atas Foto
 
     // Logo kanan atas
   if (logoKoranJawaPos.complete && logoKoranJawaPos.naturalWidth > 0) {
@@ -159,7 +151,7 @@ function renderTemplate() {
         ctx.rotate(Math.PI / 2);
         ctx.textAlign = 'right';
         ctx.fillStyle = kreditColorInput.value || '#000000'; 
-        ctx.font = 'bold 18px Metropolis';
+        ctx.font = 'bold 18px "Proxima Nova"';
         ctx.fillText(kreditInput.value, 350, 30);
         ctx.restore();
     }
@@ -208,7 +200,7 @@ function renderTemplate() {
   // Jarak antar blok
   currentY += 6;
 
-  // 9. Jabatan 
+  // Jabatan 
   currentY = drawMultilineText(
     jabatanInput.value || "Jabatan",
     margin,
@@ -219,14 +211,24 @@ function renderTemplate() {
     canvas.width - margin * 4
   );
 
-  // 10. Logo bawah kiri
+  // Logo bawah kiri
   if (logoJPBiru.complete && logoJPBiru.naturalWidth > 0) {
     const w = 95;
     const h = 95;
     ctx.drawImage(logoJPBiru, 0, canvas.height - h, w, h);
   }
 
-    // Catatan: Bingkai sudah digambar di Langkah 2 (sebelum foto).
+    // 4. Gambar Bingkai Kotak Hitam (Frame) FINAL
+    // LAPISAN 4: Paling Atas. Kode ini TIDAK memiliki kondisi, jadi dia akan SELALU digambar
+    // di atas semua elemen lain, termasuk foto.
+    ctx.strokeStyle = "#000000";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(
+        frameMargin,
+        frameMargin,
+        canvas.width - frameMargin * 2,
+        canvas.height - frameMargin * 2
+    );
 }
 
 // --- EVENT LISTENERS ---
