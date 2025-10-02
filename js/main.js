@@ -38,33 +38,7 @@ const appState = {
 };
 
 // --- Fungsi Bantuan ---
-function getWrappedLines(text, maxWidth, font) {
-  ctx.font = font;
-  const lines = [];
-  const paragraphs = String(text || "").split(/\n/);
-
-  for (const paragraph of paragraphs) {
-    const words = paragraph.split(" ");
-    let currentLine = words[0] || "";
-
-    for (let i = 1; i < words.length; i++) {
-      const word = words[i];
-      const width = ctx.measureText(currentLine + " " + word).width;
-
-      if (width < maxWidth) {
-        currentLine += " " + word;
-      } else {
-        lines.push(currentLine);
-        currentLine = word;
-      }
-    }
-
-    lines.push(currentLine);
-  }
-
-  return lines;
-}
-
+// Hapus getWrappedLines dan gunakan drawMultilineText
 function drawMultilineText(text, x, y, font, color, lineHeight, maxWidth) {
   ctx.font = font;
   ctx.fillStyle = color;
@@ -75,6 +49,11 @@ function drawMultilineText(text, x, y, font, color, lineHeight, maxWidth) {
   for (const paragraph of paragraphs) {
     const words = paragraph.split(" ");
     let currentLine = words[0] || "";
+
+    if (paragraph.trim() === "") {
+        offsetY += lineHeight;
+        continue;
+    }
 
     for (let i = 1; i < words.length; i++) {
       const word = words[i];
@@ -98,11 +77,37 @@ function drawMultilineText(text, x, y, font, color, lineHeight, maxWidth) {
 
 // --- FUNGSI RENDER UTAMA ---
 function renderTemplate() {
-  // Latar belakang
-  ctx.fillStyle = "#FAF9F6";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // 1. Gambar Foto (FULL BACKGROUND)
+    if (appState.photo) {
+        // Hapus ctx.save/restore dan clipping
+        const img = appState.photo;
+        
+        // Hitung baseScale untuk mengisi SELURUH CANVAS (1080x1350)
+        const baseScale = Math.max(
+          canvas.width / img.width, // Menggunakan lebar canvas penuh
+          canvas.height / img.height // Menggunakan tinggi canvas penuh
+        );
+        const scale = baseScale * appState.zoom;
 
-  // Bingkai
+        const drawW = img.width * scale;
+        const drawH = img.height * scale;
+
+        // Hitung posisi untuk memusatkan gambar di SELURUH CANVAS
+        const posX = ((canvas.width - drawW) / 2) + appState.offset.x;
+        const posY = ((canvas.height - drawH) / 2) + appState.offset.y;
+
+        ctx.drawImage(img, posX, posY, drawW, drawH);
+    }
+    
+    // 2. Latar belakang (hanya tampil jika tidak ada foto)
+    if (!appState.photo) {
+        ctx.fillStyle = "#FAF9F6";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+    
+
+  // 3. Bingkai (Digambar di atas foto/background)
   const frameMargin = 100;
   ctx.strokeStyle = "#000000";
   ctx.lineWidth = 1;
@@ -112,39 +117,9 @@ function renderTemplate() {
     canvas.width - frameMargin * 2,
     canvas.height - frameMargin * 2
   );
+    
+// --- LOGO DAN KONTEN KUTIPAN BERIKUTNYA TETAP SAMA DAN DIGAMBAR DI ATAS FOTO ---
 
-  // Foto
-  if (appState.photo) {
-    ctx.fillStyle = "#FAF9F6";
-    ctx.fillRect(
-      frameMargin,
-      frameMargin,
-      canvas.width - frameMargin * 2,
-      canvas.height - frameMargin * 2
-    );
-
-    const img = appState.photo;
-    const baseScale = Math.max(
-      (canvas.width - frameMargin * 2) / img.width,
-      (canvas.height - frameMargin * 2) / img.height
-    );
-    const scale = baseScale * appState.zoom;
-
-    const drawW = img.width * scale;
-    const drawH = img.height * scale;
-
-    const posX =
-      frameMargin +
-      ((canvas.width - frameMargin * 2) - drawW) / 2 +
-      appState.offset.x;
-
-    const posY =
-      frameMargin +
-      ((canvas.height - frameMargin * 2) - drawH) / 2 +
-      appState.offset.y;
-
-    ctx.drawImage(img, posX, posY, drawW, drawH);
-  }
 
   // Logo kanan atas
   if (logoKoranJawaPos.complete && logoKoranJawaPos.naturalWidth > 0) {
@@ -171,25 +146,17 @@ function renderTemplate() {
   }
 
   // Kredit Foto
-  const kreditColorInput = document.getElementById('kreditColor');
-
   if (kreditInput.value) {
-  ctx.save();
-  const kreditY = logoMedsosBottomY > 0 ? logoMedsosBottomY + 50 : canvas.height - 100;
-  ctx.translate(canvas.width - 50, kreditY);
-  ctx.rotate(-Math.PI / -2);
-  ctx.textAlign = 'right';
-  ctx.fillStyle = kreditColorInput.value || '#000000'; // hitam / putih
-  ctx.font = 'bold 18px Metropolis';
-  ctx.fillText(kreditInput.value, 350, 30);
-  ctx.restore();
-}
-
-[kutipanInput, namaInput, jabatanInput, kreditInput, kreditColorInput, quoteYSlider]
-  .forEach(el => {
-    el.addEventListener('input', renderTemplate);
-    el.addEventListener('change', renderTemplate); // untuk select
-  });
+        ctx.save();
+        const kreditY = logoMedsosBottomY > 0 ? logoMedsosBottomY + 50 : canvas.height - 100;
+        ctx.translate(canvas.width - 50, kreditY);
+        ctx.rotate(Math.PI / 2); // Rotasi 90 derajat searah jarum jam
+        ctx.textAlign = 'right';
+        ctx.fillStyle = kreditColorInput.value || '#000000'; 
+        ctx.font = 'bold 18px Metropolis';
+        ctx.fillText(kreditInput.value, 350, 30);
+        ctx.restore();
+    }
 
   // --- KONTEN KUTIPAN ---
   const margin = 160;
@@ -204,28 +171,25 @@ function renderTemplate() {
 
   currentY += 60;
 
-  // Isi kutipan
+  // Isi kutipan (Menggunakan drawMultilineText)
   const kutipanText =
     kutipanInput.value ||
     "Isi kutipan. Di sini adalah isi kutipan. Di sini adalah isi kutipan.";
 
   const kutipanFont = '40pt "DM Serif Display"';
   const kutipanLineHeight = 50;
-
-  const kutipanLines = getWrappedLines(
+  const kutipanMaxWidth = canvas.width - margin * 2 - 100;
+  
+  currentY = drawMultilineText(
     kutipanText,
-    canvas.width - margin * 2 - 100,
-    kutipanFont
+    margin,
+    currentY,
+    kutipanFont,
+    "#000000",
+    kutipanLineHeight,
+    kutipanMaxWidth
   );
-
-  ctx.fillStyle = "#000000";
-  ctx.font = kutipanFont;
-
-  kutipanLines.forEach((line, index) => {
-    ctx.fillText(line, margin, currentY + index * kutipanLineHeight);
-  });
-
-  currentY += kutipanLines.length * kutipanLineHeight;
+  
   currentY += 20;
 
   // Nama (lineHeight lebih rapat antar baris)
@@ -261,18 +225,16 @@ function renderTemplate() {
   }
 }
 
-// --- EVENT LISTENERS ---
+// --- EVENT LISTENERS (TETAP SAMA) ---
 function initialize() {
-  [kutipanInput, namaInput, jabatanInput, kreditInput, quoteYSlider].forEach(el => {
+  // Pendaftaran Event Listener di sini SAJA
+  [kutipanInput, namaInput, jabatanInput, kreditInput, quoteYSlider, zoomSlider].forEach(el => {
     el.addEventListener('input', renderTemplate);
   });
 
-  // tambahan untuk dropdown warna kredit
+  // Event change khusus untuk select
   kreditColorInput.addEventListener('change', renderTemplate);
   
-  // ... sisanya tetap
-}
-
   // Upload foto
   uploadPhotoInput.addEventListener("change", (e) => {
     const file = e.target.files && e.target.files[0];
@@ -283,6 +245,10 @@ function initialize() {
       const newImg = new Image();
       newImg.onload = () => {
         appState.photo = newImg;
+        // Reset zoom dan offset saat foto baru diunggah
+         appState.zoom = 1.0;
+         zoomSlider.value = 1.0;
+         appState.offset = { x: 0, y: 0 };
         renderTemplate();
       };
       newImg.src = ev.target.result;
@@ -290,13 +256,7 @@ function initialize() {
     reader.readAsDataURL(file);
   });
 
-  // Zoom foto
-  zoomSlider.addEventListener("input", (e) => {
-    appState.zoom = parseFloat(e.target.value);
-    renderTemplate();
-  });
-
-  // Download hasil
+  // Download hasil (Ditambahkan setTimeout untuk URL.revokeObjectURL yang lebih aman)
   downloadBtn.addEventListener("click", () => {
     const a = document.createElement("a");
     a.href = canvas.toDataURL("image/jpeg", 0.92);
@@ -304,7 +264,11 @@ function initialize() {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    URL.revokeObjectURL(a.href);
+    
+    // Delay revokeObjectURL
+    setTimeout(() => {
+      URL.revokeObjectURL(a.href);
+    }, 100);
   });
 
   // Drag foto
