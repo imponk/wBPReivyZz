@@ -87,18 +87,7 @@ function renderTemplate() {
         ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
     
-    // 2. Bingkai (Frame): Digambar PERTAMA. Foto akan berada di atas bingkai.
-    const frameMargin = 100;
-    ctx.strokeStyle = "#000000";
-    ctx.lineWidth = 1;
-    ctx.strokeRect(
-        frameMargin,
-        frameMargin,
-        canvas.width - frameMargin * 2,
-        canvas.height - frameMargin * 2
-    );
-
-    // 3. Gambar Foto (FULL BACKGROUND): Digambar di atas Bingkai
+    // 2. Gambar Foto (FULL BACKGROUND) - Digambar di lapisan kedua
     if (appState.photo) {
         const img = appState.photo;
         
@@ -127,16 +116,14 @@ function renderTemplate() {
   const quoteBlockYStart = parseInt(quoteYSlider.value, 10);
   let currentY = quoteBlockYStart;
     
-    // [Latar Belakang Kotak Kutipan (yang transparan) DIBIARKAN TERHAPUS]
-
-  // 4. Logo kanan atas
+    // 3. Logo kanan atas
   if (logoKoranJawaPos.complete && logoKoranJawaPos.naturalWidth > 0) {
     const w = 235;
     const h = 69;
     ctx.drawImage(logoKoranJawaPos, canvas.width - w - 50, 50, w, h);
   }
 
-  // 5. Logo medsos vertikal
+  // 4. Logo medsos vertikal
   let logoMedsosBottomY = 0;
   if (logoMedsosVertikal.complete && logoMedsosVertikal.naturalWidth > 0) {
     const baseHeight = 400;
@@ -153,7 +140,7 @@ function renderTemplate() {
     logoMedsosBottomY = y + h;
   }
 
-  // 6. Kredit Foto
+  // 5. Kredit Foto
   if (kreditInput.value) {
         ctx.save();
         const kreditY = logoMedsosBottomY > 0 ? logoMedsosBottomY + 50 : canvas.height - 100;
@@ -166,7 +153,7 @@ function renderTemplate() {
         ctx.restore();
     }
 
-  // 7. Ikon kutip
+  // 6. Ikon kutip
   if (ikonKutip.complete && ikonKutip.naturalWidth > 0) {
     const w = 140;
     const h = ikonKutip.naturalHeight * (w / ikonKutip.naturalWidth);
@@ -175,7 +162,7 @@ function renderTemplate() {
 
   currentY += 60;
 
-  // 8. Isi kutipan 
+  // 7. Isi kutipan 
   const kutipanText =
     kutipanInput.value ||
     "Isi kutipan. Di sini adalah isi kutipan. Di sini adalah isi kutipan.";
@@ -196,7 +183,7 @@ function renderTemplate() {
   
   currentY += 20;
 
-  // 9. Nama 
+  // 8. Nama 
   currentY = drawMultilineText(
     namaInput.value || "Nama",
     margin,
@@ -210,7 +197,7 @@ function renderTemplate() {
   // Jarak antar blok
   currentY += 6;
 
-  // 10. Jabatan 
+  // 9. Jabatan 
   currentY = drawMultilineText(
     jabatanInput.value || "Jabatan",
     margin,
@@ -221,12 +208,23 @@ function renderTemplate() {
     canvas.width - margin * 4
   );
 
-  // 11. Logo bawah kiri
+  // 10. Logo bawah kiri
   if (logoJPBiru.complete && logoJPBiru.naturalWidth > 0) {
     const w = 95;
     const h = 95;
     ctx.drawImage(logoJPBiru, 0, canvas.height - h, w, h);
   }
+
+    // 11. Bingkai (Frame) FINAL: Digambar paling akhir agar selalu terlihat di atas foto
+    const frameMargin = 100;
+    ctx.strokeStyle = "#000000";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(
+        frameMargin,
+        frameMargin,
+        canvas.width - frameMargin * 2,
+        canvas.height - frameMargin * 2
+    );
 }
 
 // --- EVENT LISTENERS ---
