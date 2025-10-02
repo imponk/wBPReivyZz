@@ -32,9 +32,9 @@ body {
 
 .card {
     display: flex;
-    flex-direction: column; /* Kontrol dan Canvas diletakkan di bawah H1 */
+    flex-direction: column; /* H1 di atas wrapper */
     align-items: center; 
-    max-width: 1400px; /* Tambahkan lebar maksimal agar ada ruang untuk kontrol dan canvas */
+    max-width: 1500px; /* Melebar untuk menampung controls + canvas */
     width: 100%;
 }
 
@@ -45,39 +45,24 @@ h1 {
   text-align: center;
 }
 
-/* --- PERBAIKAN TATA LETAK UTAMA --- */
+/* --- PERBAIKAN TATA LETAK UTAMA: Wrapper Horizontal --- */
 
-/* Wrapper untuk Controls di sebelah kiri (Baru) */
+.main-content-wrapper {
+    display: flex;
+    gap: 30px; /* Jarak antara controls dan canvas */
+    align-items: flex-start; /* Controls dan Canvas sejajar dari atas */
+    width: 100%;
+    margin-top: 15px;
+    justify-content: center;
+}
+
 .controls-container {
     display: flex;
     flex-direction: column;
-    /* Lebar maksimum agar cocok dengan input */
+    /* Lebar tetap agar tidak terlalu memakan tempat */
     width: 100%; 
     max-width: 400px; 
-    margin-bottom: 20px;
 }
-
-/* Mengelompokkan Kontrol dan Canvas secara horizontal pada layar lebar */
-.card {
-    /* ... (Tetap column di atas) ... */
-}
-/* Mengelompokkan semua konten selain H1 agar berdampingan */
-body > .card {
-    display: flex;
-    flex-direction: column; /* Tetap kolom untuk H1 di atas */
-}
-
-/* Tambahkan wrapper jika Anda ingin berdampingan: */
-/*
-.main-content-wrapper {
-    display: flex;
-    gap: 30px;
-    align-items: flex-start;
-    width: 100%;
-    max-width: 1400px;
-    margin-top: 20px;
-}
-*/
 
 /* --- Styling Tambahan untuk UX --- */
 
@@ -153,7 +138,7 @@ textarea {
 
 /* === CANVAS === */
 .canvas-container {
-  margin-top: 20px;
+  margin-top: 20px; /* Hapus margin atas agar sejajar dengan controls */
   border: 1px solid #ddd;
   cursor: grab;
   width: 1080px;
