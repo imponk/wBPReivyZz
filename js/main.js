@@ -38,7 +38,6 @@ const appState = {
 };
 
 // --- Fungsi Bantuan ---
-// Hapus getWrappedLines dan gunakan drawMultilineText
 function drawMultilineText(text, x, y, font, color, lineHeight, maxWidth) {
   ctx.font = font;
   ctx.fillStyle = color;
@@ -80,20 +79,16 @@ function renderTemplate() {
     
     // 1. Gambar Foto (FULL BACKGROUND)
     if (appState.photo) {
-        // Hapus ctx.save/restore dan clipping
         const img = appState.photo;
-        
-        // Hitung baseScale untuk mengisi SELURUH CANVAS (1080x1350)
         const baseScale = Math.max(
-          canvas.width / img.width, // Menggunakan lebar canvas penuh
-          canvas.height / img.height // Menggunakan tinggi canvas penuh
+          canvas.width / img.width,
+          canvas.height / img.height
         );
         const scale = baseScale * appState.zoom;
 
         const drawW = img.width * scale;
         const drawH = img.height * scale;
 
-        // Hitung posisi untuk memusatkan gambar di SELURUH CANVAS
         const posX = ((canvas.width - drawW) / 2) + appState.offset.x;
         const posY = ((canvas.height - drawH) / 2) + appState.offset.y;
 
@@ -118,8 +113,26 @@ function renderTemplate() {
     canvas.height - frameMargin * 2
   );
     
-// --- LOGO DAN KONTEN KUTIPAN BERIKUTNYA TETAP SAMA DAN DIGAMBAR DI ATAS FOTO ---
+    // --- KONTEN KUTIPAN ---
+  const margin = 160;
+  const quoteBlockYStart = parseInt(quoteYSlider.value, 10);
+  let currentY = quoteBlockYStart;
+    
+    // 4. Latar Belakang Kotak Kutipan (Overlay untuk Readability)
+    if (appState.photo) {
+        // Asumsi tinggi maksimal blok kutipan adalah 450px dan mulai 100px di atas kutipan (untuk ikon dan padding)
+        const PADDING = 30;
+        const BOX_HEIGHT = 450; 
+        const BOX_WIDTH = canvas.width - 2 * margin;
 
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.75)'; // Latar belakang Putih 75% transparan
+        ctx.fillRect(
+            margin - PADDING, 
+            quoteBlockYStart - PADDING,
+            BOX_WIDTH + 2 * PADDING,
+            BOX_HEIGHT
+        );
+    }
 
   // Logo kanan atas
   if (logoKoranJawaPos.complete && logoKoranJawaPos.naturalWidth > 0) {
@@ -158,9 +171,6 @@ function renderTemplate() {
         ctx.restore();
     }
 
-  // --- KONTEN KUTIPAN ---
-  const margin = 160;
-  let currentY = parseInt(quoteYSlider.value, 10);
 
   // Ikon kutip
   if (ikonKutip.complete && ikonKutip.naturalWidth > 0) {
@@ -225,7 +235,7 @@ function renderTemplate() {
   }
 }
 
-// --- EVENT LISTENERS (TETAP SAMA) ---
+// --- EVENT LISTENERS ---
 function initialize() {
   // Pendaftaran Event Listener di sini SAJA
   [kutipanInput, namaInput, jabatanInput, kreditInput, quoteYSlider, zoomSlider].forEach(el => {
@@ -235,6 +245,12 @@ function initialize() {
   // Event change khusus untuk select
   kreditColorInput.addEventListener('change', renderTemplate);
   
+    // --- PERBAIKAN: Mencegah Drag Membayang pada Canvas ---
+    canvas.addEventListener("dragstart", (e) => {
+        e.preventDefault(); 
+    });
+    // --- AKHIR PERBAIKAN ---
+
   // Upload foto
   uploadPhotoInput.addEventListener("change", (e) => {
     const file = e.target.files && e.target.files[0];
@@ -256,7 +272,7 @@ function initialize() {
     reader.readAsDataURL(file);
   });
 
-  // Download hasil (Ditambahkan setTimeout untuk URL.revokeObjectURL yang lebih aman)
+  // Download hasil 
   downloadBtn.addEventListener("click", () => {
     const a = document.createElement("a");
     a.href = canvas.toDataURL("image/jpeg", 0.92);
@@ -265,7 +281,6 @@ function initialize() {
     a.click();
     document.body.removeChild(a);
     
-    // Delay revokeObjectURL
     setTimeout(() => {
       URL.revokeObjectURL(a.href);
     }, 100);
