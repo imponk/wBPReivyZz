@@ -1,4 +1,3 @@
-// --- Elemen DOM ---
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
@@ -15,8 +14,6 @@ const kreditColorInput = document.getElementById('kreditColor');
 const downloadBtn = document.getElementById("download");
 const canvasContainer = document.getElementById("canvasContainer");
 
-// --- Aset & State ---
-// Pastikan path ke aset (logo) sudah benar
 const logoKoranJawaPos = new Image();
 logoKoranJawaPos.src = "assets/jawapos-kanan.svg";
 
@@ -38,7 +35,6 @@ const appState = {
   initialOffset: { x: 0, y: 0 },
 };
 
-// --- Fungsi Bantuan ---
 function drawMultilineText(text, x, y, font, color, lineHeight, maxWidth) {
   ctx.font = font;
   ctx.fillStyle = color;
@@ -75,42 +71,16 @@ function drawMultilineText(text, x, y, font, color, lineHeight, maxWidth) {
   return y + offsetY;
 }
 
-// --- FUNGSI RENDER UTAMA ---
 function renderTemplate() {
     
-    // Hapus konten Canvas sebelumnya
     ctx.clearRect(0, 0, canvas.width, canvas.height); 
-    const frameMargin = 100; // Margin untuk bingkai
+    const frameMargin = 100;
     
-    // 1. LAPISAN 1 (PALING BAWAH): Latar belakang kanvas putih
+    // 1. LAPISAN 1: Latar belakang kanvas putih
     ctx.fillStyle = "#FAF9F6";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // ******************************************************
-    // *** 2. LAPISAN 2: Gambar Foto (FULL CANVAS - DI ATAS LATAR BELAKANG) ***
-    // ******************************************************
-    if (appState.photo) {
-        const img = appState.photo;
-        
-        // Hitung skala dan posisi untuk menutupi seluruh Canvas
-        const baseScale = Math.max(canvas.width / img.width, canvas.height / img.height);
-        const scale = baseScale * appState.zoom; 
-        const drawW = img.width * scale;
-        const drawH = img.height * scale;
-        
-        // Hitung posisi untuk memusatkan foto di Canvas
-        const posX = ((canvas.width - drawW) / 2) + appState.offset.x;
-        const posY = ((canvas.height - drawH) / 2) + appState.offset.y;
-
-        if (!isNaN(posX) && !isNaN(posY) && !isNaN(drawW) && !isNaN(drawH)) {
-            ctx.drawImage(img, posX, posY, drawW, drawH);
-        }
-    }
-    // ******************************************************
-
-    // ******************************************************
-    // *** 3. LAPISAN 3: BINGKAI KOTAK HITAM (DI ATAS FOTO) ***
-    // ******************************************************
+    // 2. LAPISAN 2: BINGKAI KOTAK HITAM (Di bawah Foto)
     const lineWidth = 1;
     ctx.strokeStyle = "#000000";
     ctx.lineWidth = lineWidth;
@@ -120,15 +90,29 @@ function renderTemplate() {
         canvas.width - frameMargin * 2,
         canvas.height - frameMargin * 2
     );
-    // ******************************************************
+
+    // 3. LAPISAN 3: Gambar Foto (FULL CANVAS - Menutup Bingkai)
+    if (appState.photo) {
+        const img = appState.photo;
+        
+        const baseScale = Math.max(canvas.width / img.width, canvas.height / img.height);
+        const scale = baseScale * appState.zoom; 
+        const drawW = img.width * scale;
+        const drawH = img.height * scale;
+        
+        const posX = ((canvas.width - drawW) / 2) + appState.offset.x;
+        const posY = ((canvas.height - drawH) / 2) + appState.offset.y;
+
+        if (!isNaN(posX) && !isNaN(posY) && !isNaN(drawW) && !isNaN(drawH)) {
+            ctx.drawImage(img, posX, posY, drawW, drawH);
+        }
+    }
     
-    // --- Inisialisasi posisi teks/logo ---
+    // 4. LAPISAN 4: Konten Teks dan Logo
   const margin = 160;
   const quoteBlockYStart = parseInt(quoteYSlider.value, 10);
   let currentY = quoteBlockYStart;
     
-    // 4. LAPISAN 4 (PALING ATAS): Konten Teks dan Logo
-
     // Logo kanan atas
   if (logoKoranJawaPos.complete && logoKoranJawaPos.naturalWidth > 0) {
     const w = 235;
@@ -162,7 +146,7 @@ function renderTemplate() {
         ctx.textAlign = 'right';
         ctx.fillStyle = kreditColorInput.value || '#000000'; 
         ctx.font = 'bold 18px "Proxima Nova"'; 
-        ctx.fillText(350, 30, kreditInput.value); // Urutan parameterfillText yang benar: text, x, y
+        ctx.fillText(kreditInput.value, 350, 30);
         ctx.restore();
     }
 
@@ -200,16 +184,13 @@ function renderTemplate() {
   }
 }
 
-// --- EVENT LISTENERS ---
 function initialize() {
     
-    // Pendaftaran Event Listener untuk input teks, slider, dan select
     [kutipanInput, namaInput, jabatanInput, kreditInput, kreditColorInput, zoomSlider, quoteYSlider].forEach(el => {
         el.addEventListener('input', renderTemplate);
         el.addEventListener('change', renderTemplate);
     });
     
-    // Upload foto
     uploadPhotoInput.addEventListener("change", (e) => {
         const file = e.target.files && e.target.files[0];
         if (!file) return;
@@ -219,7 +200,6 @@ function initialize() {
             const newImg = new Image();
             newImg.onload = () => {
                 appState.photo = newImg;
-                // Reset zoom & offset
                 appState.zoom = 1.0;
                 zoomSlider.value = 1.0;
                 appState.offset = { x: 0, y: 0 };
@@ -230,7 +210,6 @@ function initialize() {
         reader.readAsDataURL(file);
     });
     
-    // Download hasil 
     downloadBtn.addEventListener("click", () => {
         const a = document.createElement("a");
         a.href = canvas.toDataURL("image/jpeg", 0.92);
@@ -244,7 +223,6 @@ function initialize() {
         }, 100);
     });
 
-    // Drag foto (Mouse Down, Move, Up) - Logika Dragging (untuk foto full canvas)
     canvas.addEventListener("mousedown", (e) => {
         e.preventDefault(); 
         if (!appState.photo) return;
@@ -266,7 +244,6 @@ function initialize() {
         canvasContainer.classList.remove("grabbing");
     });
 
-    // Pastikan semua aset diload
     const allAssets = [logoKoranJawaPos, logoJPBiru, ikonKutip, logoMedsosVertikal];
     allAssets.forEach((img) => {
         if (img.complete) {
@@ -279,5 +256,4 @@ function initialize() {
     renderTemplate();
 }
 
-// --- Jalankan Aplikasi ---
 initialize();
