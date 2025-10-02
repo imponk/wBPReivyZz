@@ -81,7 +81,24 @@ function renderTemplate() {
     // Hapus konten Canvas sebelumnya
     ctx.clearRect(0, 0, canvas.width, canvas.height); 
 
-    // 1. Gambar Foto (FULL BACKGROUND)
+    // 1. Latar belakang (Hanya tampil jika tidak ada foto)
+    if (!appState.photo) {
+        ctx.fillStyle = "#FAF9F6";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+    
+    // 2. Bingkai (Frame): Digambar PERTAMA. Foto akan berada di atas bingkai.
+    const frameMargin = 100;
+    ctx.strokeStyle = "#000000";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(
+        frameMargin,
+        frameMargin,
+        canvas.width - frameMargin * 2,
+        canvas.height - frameMargin * 2
+    );
+
+    // 3. Gambar Foto (FULL BACKGROUND): Digambar di atas Bingkai
     if (appState.photo) {
         const img = appState.photo;
         
@@ -106,40 +123,20 @@ function renderTemplate() {
         }
     }
     
-    // 2. Latar belakang (hanya tampil jika tidak ada foto)
-    if (!appState.photo) {
-        ctx.fillStyle = "#FAF9F6";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-    }
-    
-
-  // 3. Bingkai (Hanya digambar jika TIDAK ADA foto)
-  if (!appState.photo) {
-        const frameMargin = 100;
-        ctx.strokeStyle = "#000000";
-        ctx.lineWidth = 1;
-        ctx.strokeRect(
-            frameMargin,
-            frameMargin,
-            canvas.width - frameMargin * 2,
-            canvas.height - frameMargin * 2
-        );
-    }
-    
   const margin = 160;
   const quoteBlockYStart = parseInt(quoteYSlider.value, 10);
   let currentY = quoteBlockYStart;
     
-    // [BAGIAN LATAR BELAKANG KOTAK KUTIPAN DIHAPUS DI SINI]
+    // [Latar Belakang Kotak Kutipan (yang transparan) DIBIARKAN TERHAPUS]
 
-  // Logo kanan atas
+  // 4. Logo kanan atas
   if (logoKoranJawaPos.complete && logoKoranJawaPos.naturalWidth > 0) {
     const w = 235;
     const h = 69;
     ctx.drawImage(logoKoranJawaPos, canvas.width - w - 50, 50, w, h);
   }
 
-  // Logo medsos vertikal
+  // 5. Logo medsos vertikal
   let logoMedsosBottomY = 0;
   if (logoMedsosVertikal.complete && logoMedsosVertikal.naturalWidth > 0) {
     const baseHeight = 400;
@@ -156,7 +153,7 @@ function renderTemplate() {
     logoMedsosBottomY = y + h;
   }
 
-  // Kredit Foto
+  // 6. Kredit Foto
   if (kreditInput.value) {
         ctx.save();
         const kreditY = logoMedsosBottomY > 0 ? logoMedsosBottomY + 50 : canvas.height - 100;
@@ -169,7 +166,7 @@ function renderTemplate() {
         ctx.restore();
     }
 
-  // Ikon kutip
+  // 7. Ikon kutip
   if (ikonKutip.complete && ikonKutip.naturalWidth > 0) {
     const w = 140;
     const h = ikonKutip.naturalHeight * (w / ikonKutip.naturalWidth);
@@ -178,7 +175,7 @@ function renderTemplate() {
 
   currentY += 60;
 
-  // Isi kutipan 
+  // 8. Isi kutipan 
   const kutipanText =
     kutipanInput.value ||
     "Isi kutipan. Di sini adalah isi kutipan. Di sini adalah isi kutipan.";
@@ -199,7 +196,7 @@ function renderTemplate() {
   
   currentY += 20;
 
-  // Nama 
+  // 9. Nama 
   currentY = drawMultilineText(
     namaInput.value || "Nama",
     margin,
@@ -213,7 +210,7 @@ function renderTemplate() {
   // Jarak antar blok
   currentY += 6;
 
-  // Jabatan 
+  // 10. Jabatan 
   currentY = drawMultilineText(
     jabatanInput.value || "Jabatan",
     margin,
@@ -224,7 +221,7 @@ function renderTemplate() {
     canvas.width - margin * 4
   );
 
-  // Logo bawah kiri
+  // 11. Logo bawah kiri
   if (logoJPBiru.complete && logoJPBiru.naturalWidth > 0) {
     const w = 95;
     const h = 95;
