@@ -1,5 +1,4 @@
 /* === FONT FACE === */
-/* Pastikan path font Proxima Nova sudah benar */
 @font-face {
   font-family: 'Proxima Nova';
   font-weight: normal;
@@ -26,7 +25,7 @@ body {
   font-family: 'Proxima Nova', system-ui, sans-serif;
   background: #fafafa;
   margin: 0;
-  padding: 24px 10px; /* Padding lebih kecil di mobile */
+  padding: 24px 10px; 
   display: flex;
   justify-content: center;
 }
@@ -52,7 +51,7 @@ h1 {
     display: flex;
     flex-direction: column; /* Default: Bertumpuk di mobile */
     gap: 20px;
-    align-items: center; /* Pusatkan controls dan canvas */
+    align-items: center; 
     width: 100%;
     margin-top: 15px;
 }
@@ -60,7 +59,6 @@ h1 {
 .controls-container {
     display: flex;
     flex-direction: column;
-    /* Batasi lebar controls agar rapi */
     width: 100%; 
     max-width: 400px; 
 }
@@ -137,13 +135,20 @@ textarea {
   resize: vertical;
 }
 
+/* ATUR UKURAN TEXTAREA NAMA DAN JABATAN */
+#namaInput,
+#jabatanInput {
+    min-height: 40px; 
+    max-height: 100px;
+}
+
 /* === CANVAS === */
 .canvas-container {
   margin-top: 0; 
   border: 1px solid #ddd;
   cursor: grab;
-  width: 100%; /* Gunakan lebar penuh di mobile */
-  max-width: 400px; /* Tapi batasi agar tidak terlalu lebar di mobile/tablet */
+  width: 100%; 
+  max-width: 400px; 
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
   background: #fff;
@@ -168,12 +173,11 @@ textarea {
     
     .main-content-wrapper {
         flex-direction: row; /* Berdampingan di desktop */
-        align-items: flex-start; /* Sejajar dari atas */
+        align-items: flex-start; 
         justify-content: center;
     }
     
     .canvas-container {
-        /* Set Canvas ke ukuran default 1080px (diredimensioning by width: 400px) */
         width: 400px; 
         max-width: 400px;
     }
