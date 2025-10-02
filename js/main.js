@@ -125,16 +125,17 @@ function renderTemplate() {
 
   // Foto
   if (appState.photo) {
-    ctx.save();
-    // Klip gambar di dalam bingkai
-    ctx.beginPath();
-    ctx.rect(
-        frameMargin,
-        frameMargin,
-        canvas.width - frameMargin * 2,
-        canvas.height - frameMargin * 2
-    );
-    ctx.clip();
+    ctx.save(); // Simpan state Canvas saat ini
+
+    // Mulai path baru untuk area clipping
+    ctx.beginPath();
+    ctx.rect(
+      frameMargin,
+      frameMargin,
+      canvas.width - frameMargin * 2,
+      canvas.height - frameMargin * 2
+    );
+    ctx.clip(); // Potong semua gambar berikutnya agar hanya terlihat di dalam area rect ini
     
     const img = appState.photo;
     const baseScale = Math.max(
@@ -157,7 +158,7 @@ function renderTemplate() {
       appState.offset.y;
 
     ctx.drawImage(img, posX, posY, drawW, drawH);
-    ctx.restore();
+    ctx.restore(); // Kembalikan state Canvas sebelumnya (menghapus clipping path)
   }
 
   // Logo kanan atas
