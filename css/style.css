@@ -49,7 +49,7 @@ h1 {
 
 .main-content-wrapper {
     display: flex;
-    flex-direction: column; /* Default: Bertumpuk di mobile */
+    flex-direction: column; 
     gap: 20px;
     align-items: center; 
     width: 100%;
@@ -152,6 +152,8 @@ textarea {
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
   background: #fff;
+  /* Penting untuk mencegah native drag ghosting */
+  user-select: none; 
 }
 
 .canvas-container canvas {
@@ -172,7 +174,7 @@ textarea {
     }
     
     .main-content-wrapper {
-        flex-direction: row; /* Berdampingan di desktop */
+        flex-direction: row; 
         align-items: flex-start; 
         justify-content: center;
     }
