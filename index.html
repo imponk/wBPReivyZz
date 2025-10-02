@@ -1,65 +1,85 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jawa Pos Kutipan Generator</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap" rel="stylesheet">
-    </head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Jawa Pos Instagram Quote Generator</title>
+
+<link rel="stylesheet" type="text/css;charset=utf-8" href="https://cdn.jsdelivr.net/npm/@typehaus/metropolis/index.css" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+
+</head>
 <body>
-
-    <div class="app-container">
+<div class="card">
+    <h1>Instagram Quote Generator</h1>
+    
+    <div class="main-content-wrapper"> 
         
-        <div class="controls-container">
+        <div class="controls-container"> 
             
-            <h1>Jawa Pos Quote Generator</h1>
+            <h2>Konten Kutipan</h2>
+            <div class="controls">
+                <div>
+                    <label for="kutipanInput">Kutipan</label>
+                    <textarea id="kutipanInput" placeholder="Masukkan kutipan di sini..."></textarea>
+                </div>
+                <div>
+                    <label for="namaInput">Nama Tokoh (Multi-baris)</label>
+                    <textarea id="namaInput" placeholder="Nama sumber kutipan, mis: Prof. Dr. Andi Bachtiar"></textarea>
+                </div>
+                <div>
+                    <label for="jabatanInput">Jabatan / Keterangan (Multi-baris)</label>
+                    <textarea id="jabatanInput" placeholder="Jabatan atau keterangan tambahan, mis: Pakar Ekonomi UI"></textarea>
+                </div>
+            </div>
 
-            <h3>Konten Kutipan</h3>
-            <label for="kutipanInput">Kutipan:</label>
-            <textarea id="kutipanInput" rows="4" placeholder="Masukkan kutipan di sini..."></textarea>
+            <h2>Kontrol Foto & Kredit</h2>
+            <div class="controls">
+                <div>
+                    <label for="uploadPhoto">Upload Foto Latar</label>
+                    <input id="uploadPhoto" type="file" accept="image/*">
+                </div>
+                <div>
+                    <label for="kreditInput">Kredit Foto (Opsional)</label>
+                    <input type="text" id="kreditInput" placeholder="Nama fotografer, mis: Jawa Pos/Fahmi" />
+                </div>
+                <div>
+                    <label for="kreditColor">Warna Kredit Foto</label>
+                    <select id="kreditColor">
+                        <option value="#000000">Hitam (Default)</option>
+                        <option value="#FFFFFF">Putih</option>
+                    </select>
+                </div>
+            </div>
             
-            <label for="namaInput">Nama Tokoh:</label>
-            <input type="text" id="namaInput" placeholder="Contoh: Bima Sakti" />
-
-            <label for="jabatanInput">Jabatan/Keterangan:</label>
-            <input type="text" id="jabatanInput" placeholder="Contoh: Kepala Dinas Pendidikan Jatim" />
+            <h2>Penyesuaian Visual (Canvas)</h2>
+            <div class="slider-controls">
+                <div>
+                    <label for="zoomSlider">Zoom Foto</label>
+                    <input type="range" id="zoomSlider" min="0.1" max="3" step="0.01" value="1" />
+                </div>
+                <div>
+                    <label for="quoteYSlider">Geser Blok Kutipan Vertikal (Y)</label>
+                    <input type="range" id="quoteYSlider" min="200" max="800" value="385" />
+                </div>
+            </div>
             
-            <hr>
-
-            <h3>Pengaturan Foto & Posisi</h3>
-            <label for="uploadPhoto">Upload Foto Latar Belakang:</label>
-            <input type="file" id="uploadPhoto" accept="image/*" />
-            
-            <label for="zoomSlider">Zoom Foto:</label>
-            <input type="range" id="zoomSlider" min="1.0" max="3.0" step="0.05" value="1.0" />
-            
-            <label for="quoteYSlider">Posisi Kutipan Vertikal (Y):</label>
-            <input type="range" id="quoteYSlider" min="150" max="650" step="10" value="300" />
-            
-            <hr>
-
-            <h3>Kredit Foto & Download</h3>
-            <label for="kreditInput">Kredit Foto (Vertikal):</label>
-            <input type="text" id="kreditInput" placeholder="Contoh: FOTO: JAWA POS/FADIL" />
-            
-            <label for="kreditColor">Warna Teks Kredit:</label>
-            <select id="kreditColor">
-                <option value="#000000">Hitam</option>
-                <option value="#FFFFFF">Putih</option>
-            </select>
-            
-            <hr>
-            
-            <button id="download">DOWNLOAD HASIL (JPG)</button>
-        </div>
-
-        <div id="canvasContainer" class="canvas-container">
-            <canvas id="canvas" width="1080" height="1080"></canvas>
+            <div class="controls">
+                <div>
+                    <button id="download">DOWNLOAD HASIL (JPEG)</button>
+                </div>
+            </div>
         </div>
         
+        <div class="canvas-container" id="canvasContainer">
+            <canvas id="canvas" width="1080" height="1350"></canvas>
+        </div>
     </div>
+</div>
 
-    <script src="main.js"></script>
+<script src="js/main.js"></script>
+
 </body>
 </html>
