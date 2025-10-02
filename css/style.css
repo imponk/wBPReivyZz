@@ -1,93 +1,186 @@
+/* === FONT FACE === */
+@font-face {
+  font-family: 'Proxima Nova';
+  font-weight: normal;
+  font-style: normal;
+  src: url('assets/proxima-nova-regular.woff2') format('woff2'); 
+}
+
+@font-face {
+  font-family: 'Proxima Nova';
+  font-weight: normal;
+  font-style: italic;
+  src: url('assets/proxima-nova-italic.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Proxima Nova';
+  font-weight: bold;
+  font-style: normal;
+  src: url('assets/proxima-nova-bold.woff2') format('woff2');
+}
+
+/* === GLOBAL === */
 body {
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-    font-family: Arial, sans-serif;
-    min-height: 100vh; /* Memastikan body mengambil tinggi penuh */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+  font-family: 'Proxima Nova', system-ui, sans-serif;
+  background: #fafafa;
+  margin: 0;
+  padding: 24px 10px; 
+  display: flex;
+  justify-content: center;
 }
 
-.app-container {
+.card {
     display: flex;
-    max-width: 1400px;
-    width: 90%;
-    background-color: #fff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    overflow: hidden;
-    min-height: 800px; /* Tinggi minimal yang cukup */
+    flex-direction: column; 
+    align-items: center; 
+    max-width: 1500px; 
+    width: 100%;
 }
 
-/* Kontainer Kontrol */
+h1 {
+  margin: 0 0 12px;
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* --- TATA LETAK UTAMA: MOBILE FIRST (BERTUMPUK) --- */
+
+.main-content-wrapper {
+    display: flex;
+    flex-direction: column; 
+    gap: 20px;
+    align-items: center; 
+    width: 100%;
+    margin-top: 15px;
+}
+
 .controls-container {
-    width: 350px;
-    padding: 20px;
-    background-color: #fafafa; 
-    border-right: 1px solid #ddd;
-    overflow-y: auto; 
-}
-
-.controls-container h1 {
-    font-size: 1.5em;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-}
-
-.controls-container label {
-    display: block;
-    margin-top: 10px;
-    font-weight: bold;
-}
-
-.controls-container input[type="text"],
-.controls-container textarea,
-.controls-container select {
-    width: calc(100% - 20px);
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-.controls-container hr {
-    margin: 20px 0;
-    border: none;
-    border-top: 1px solid #eee;
-}
-
-/* Kontainer Canvas */
-.canvas-container {
-    flex: 1;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    cursor: grab;
+    flex-direction: column;
+    width: 100%; 
+    max-width: 400px; 
+}
+
+/* --- Styling Tambahan untuk UX --- */
+
+.card h2 {
+    margin: 20px 0 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #007cbc; 
+    border-bottom: 1px solid #eee;
+    padding-bottom: 4px;
+    width: 100%;
+    text-align: left;
+}
+
+
+/* === FORM CONTROL === */
+.controls,
+.slider-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.controls div,
+.slider-controls div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+label {
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 2px;
+  color: #333;
+}
+
+button,
+input,
+textarea,
+select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+button {
+  background: #007cbc;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #005a8f;
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* ATUR UKURAN TEXTAREA NAMA DAN JABATAN */
+#namaInput,
+#jabatanInput {
+    min-height: 40px; 
+    max-height: 100px;
+}
+
+/* === CANVAS === */
+.canvas-container {
+  margin-top: 0; 
+  border: 1px solid #ddd;
+  cursor: grab;
+  width: 100%; 
+  max-width: 400px; 
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  background: #fff;
+  /* Penting untuk mencegah native drag ghosting */
+  user-select: none; 
+}
+
+.canvas-container canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
 }
 
 .canvas-container.grabbing {
-    cursor: grabbing;
+  cursor: grabbing;
 }
 
-#canvas {
-    border: 1px solid #ddd;
-    display: block;
-    max-width: 100%;
-    height: auto;
-}
-
-#download {
-    width: 100%;
-    padding: 10px;
-    background-color: #000;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 10px;
+/* --- MEDIA QUERY: LAYAR LEBAR (BERDAMPINGAN) --- */
+@media (min-width: 900px) {
+    body {
+        padding: 30px;
+    }
+    
+    .main-content-wrapper {
+        flex-direction: row; 
+        align-items: flex-start; 
+        justify-content: center;
+    }
+    
+    .canvas-container {
+        width: 400px; 
+        max-width: 400px;
+    }
 }
