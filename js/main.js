@@ -237,98 +237,106 @@ function renderTemplate() {
 
 // --- EVENT LISTENERS ---
 function initialize() {
-  // Pendaftaran Event Listener di sini SAJA
-  [kutipanInput, namaInput, jabatanInput, kreditInput, quoteYSlider, zoomSlider].forEach(el => {
-    el.addEventListener('input', renderTemplate);
-  });
+    
+    // Pendaftaran Event Listener untuk input teks dan penggeser posisi kutipan (quoteYSlider)
+    [kutipanInput, namaInput, jabatanInput, kreditInput, quoteYSlider].forEach(el => {
+        el.addEventListener('input', renderTemplate);
+    });
 
-  // Event change khusus untuk select
-  kreditColorInput.addEventListener('change', renderTemplate);
+    // --- PERBAIKAN ZOOM SLIDER ---
+    // Tambahkan listener khusus untuk Zoom Slider
+    zoomSlider.addEventListener("input", (e) => {
+        appState.zoom = parseFloat(e.target.value); // <<< INI YANG HILANG! Memperbarui appState.zoom
+        renderTemplate();
+    });
+    // ----------------------------
+
+    // Event change khusus untuk select
+    kreditColorInput.addEventListener('change', renderTemplate);
   
-    // --- PERBAIKAN: Mencegah Drag Membayang pada Canvas ---
+    // Mencegah Drag Membayang pada Canvas
     canvas.addEventListener("dragstart", (e) => {
         e.preventDefault(); 
     });
-    // --- AKHIR PERBAIKAN ---
 
-  // Upload foto
-  uploadPhotoInput.addEventListener("change", (e) => {
-    const file = e.target.files && e.target.files[0];
-    if (!file) return;
+    // Upload foto
+    uploadPhotoInput.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const newImg = new Image();
-      newImg.onload = () => {
-        appState.photo = newImg;
-        // Reset zoom dan offset saat foto baru diunggah
-         appState.zoom = 1.0;
-         zoomSlider.value = 1.0;
-         appState.offset = { x: 0, y: 0 };
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            const newImg = new Image();
+            newImg.onload = () => {
+                appState.photo = newImg;
+                // Reset zoom dan offset saat foto baru diunggah
+                appState.zoom = 1.0;
+                zoomSlider.value = 1.0;
+                appState.offset = { x: 0, y: 0 };
+                renderTemplate();
+            };
+            newImg.src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // Download hasil 
+    downloadBtn.addEventListener("click", () => {
+        const a = document.createElement("a");
+        a.href = canvas.toDataURL("image/jpeg", 0.92);
+        a.download = "kutipan-jawapos.jpg";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        
+        setTimeout(() => {
+            URL.revokeObjectURL(a.href);
+        }, 100);
+    });
+
+    // Drag foto
+    canvas.addEventListener("mousedown", (e) => {
+        if (!appState.photo) return;
+        appState.isDragging = true;
+        appState.dragStart = { x: e.clientX, y: e.clientY };
+        appState.initialOffset = {
+            x: appState.offset.x,
+            y: appState.offset.y,
+        };
+        canvasContainer.classList.add("grabbing");
+    });
+
+    window.addEventListener("mousemove", (e) => {
+        if (!appState.isDragging) return;
+        appState.offset.x =
+            appState.initialOffset.x + (e.clientX - appState.dragStart.x);
+        appState.offset.y =
+            appState.initialOffset.y + (e.clientY - appState.dragStart.y);
         renderTemplate();
-      };
-      newImg.src = ev.target.result;
-    };
-    reader.readAsDataURL(file);
-  });
+    });
 
-  // Download hasil 
-  downloadBtn.addEventListener("click", () => {
-    const a = document.createElement("a");
-    a.href = canvas.toDataURL("image/jpeg", 0.92);
-    a.download = "kutipan-jawapos.jpg";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    
-    setTimeout(() => {
-      URL.revokeObjectURL(a.href);
-    }, 100);
-  });
+    window.addEventListener("mouseup", () => {
+        appState.isDragging = false;
+        canvasContainer.classList.remove("grabbing");
+    });
 
-  // Drag foto
-  canvas.addEventListener("mousedown", (e) => {
-    if (!appState.photo) return;
-    appState.isDragging = true;
-    appState.dragStart = { x: e.clientX, y: e.clientY };
-    appState.initialOffset = {
-      x: appState.offset.x,
-      y: appState.offset.y,
-    };
-    canvasContainer.classList.add("grabbing");
-  });
+    // Pastikan semua aset diload
+    const allAssets = [
+        logoKoranJawaPos,
+        logoJPBiru,
+        ikonKutip,
+        logoMedsosVertikal,
+    ];
 
-  window.addEventListener("mousemove", (e) => {
-    if (!appState.isDragging) return;
-    appState.offset.x =
-      appState.initialOffset.x + (e.clientX - appState.dragStart.x);
-    appState.offset.y =
-      appState.initialOffset.y + (e.clientY - appState.dragStart.y);
+    allAssets.forEach((img) => {
+        if (img.complete) {
+            renderTemplate();
+        } else {
+            img.onload = renderTemplate;
+        }
+    });
+
     renderTemplate();
-  });
-
-  window.addEventListener("mouseup", () => {
-    appState.isDragging = false;
-    canvasContainer.classList.remove("grabbing");
-  });
-
-  // Pastikan semua aset diload
-  const allAssets = [
-    logoKoranJawaPos,
-    logoJPBiru,
-    ikonKutip,
-    logoMedsosVertikal,
-  ];
-
-  allAssets.forEach((img) => {
-    if (img.complete) {
-      renderTemplate();
-    } else {
-      img.onload = renderTemplate;
-    }
-  });
-
-  renderTemplate();
 }
 
 // --- Jalankan Aplikasi ---
