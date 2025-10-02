@@ -1,34 +1,63 @@
-body {
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-    font-family: Arial, sans-serif;
-    /* Pastikan Body mengambil tinggi penuh viewport */
-    min-height: 100vh; 
+/* ASUMSI FONT-FACE: Anda harus menyediakan file font Proxima Nova di folder yang benar */
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('fonts/proxima-nova-regular.woff2') format('woff2'),
+         url('fonts/proxima-nova-regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('fonts/proxima-nova-bold.woff2') format('woff2'),
+         url('fonts/proxima-nova-bold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('fonts/proxima-nova-italic.woff2') format('woff2'),
+         url('fonts/proxima-nova-italic.woff') format('woff');
+    font-weight: 400;
+    font-style: italic;
 }
 
-/* Container Utama Aplikasi - Fokus: Membuat konten terpusat dan terlihat */
+
+/* TATA LETAK UTAMA: Memperbaiki masalah Canvas tidak muncul */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #f4f4f4;
+    font-family: 'Proxima Nova', Arial, sans-serif; /* Mengembalikan Proxima Nova */
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    padding: 30px 0; /* Padding agar konten tidak menempel tepi saat tampilan kecil */
+}
+
 .app-container {
     display: flex;
     max-width: 1400px;
-    /* Ubah margin agar terlihat di tengah dan punya ruang */
-    margin: 30px auto; 
+    width: 90%; 
     background-color: #fff;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     overflow: hidden;
-    /* Pastikan tinggi minimal ada untuk menampung canvas/controls */
     min-height: 800px; 
 }
 
 /* Kontainer Canvas */
 .canvas-container {
-    flex: 1;
+    flex: 2; 
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px;
-    cursor: grab; /* Kursor default untuk drag foto */
+    cursor: grab;
+    background-color: #ffffff; 
 }
 
 .canvas-container.grabbing {
@@ -39,7 +68,6 @@ body {
     border: 1px solid #ddd;
     display: block;
     max-width: 100%;
-    /* Atur tinggi maksimal agar canvas tidak terlalu besar */
     max-height: 700px; 
     height: auto;
 }
@@ -48,13 +76,16 @@ body {
 /* Styling Controls Container (UI/UX) */
 /* ------------------------------------------- */
 .controls-container {
-    width: 350px; 
+    flex: 1; 
+    max-width: 350px; 
     padding: 20px;
     background-color: #fafafa; 
     border-right: 1px solid #ddd;
-    overflow-y: auto; /* Memungkinkan scroll pada panel kontrol */
-    font-family: 'Proxima Nova', sans-serif;
+    overflow-y: auto; 
+    font-family: 'Proxima Nova', Arial, sans-serif; /* Mengembalikan Proxima Nova */
 }
+
+/* --- Styling Detail Input (Sama dengan sebelumnya, tapi font diperbaiki) --- */
 
 .controls-container h1 {
     font-size: 1.5em;
@@ -64,7 +95,6 @@ body {
     margin-bottom: 20px;
 }
 
-/* Mengelompokkan Kontrol */
 fieldset {
     border: 1px solid #e0e0e0;
     padding: 15px;
@@ -86,7 +116,6 @@ legend {
     flex-direction: column;
 }
 
-/* Styling Label */
 label {
     font-weight: 600;
     margin-bottom: 5px;
@@ -94,7 +123,6 @@ label {
     font-size: 0.95em;
 }
 
-/* Styling Input Umum */
 input[type="text"],
 textarea,
 select {
@@ -111,8 +139,8 @@ textarea {
     resize: vertical;
 }
 
-/* Styling Slider (Range Input) */
 input[type="range"] {
+    /* ... (CSS range slider tetap sama) ... */
     width: 100%;
     margin-top: 10px;
     -webkit-appearance: none;
@@ -135,7 +163,6 @@ input[type="range"]::-webkit-slider-thumb {
     cursor: pointer;
 }
 
-/* Styling Tombol Download */
 #download {
     width: 100%;
     padding: 15px;
