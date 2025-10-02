@@ -7,8 +7,8 @@ const zoomSlider = document.getElementById("zoomSlider");
 const quoteYSlider = document.getElementById("quoteYSlider");
 
 const kutipanInput = document.getElementById("kutipanInput");
-const namaInput = document.getElementById("namaInput"); // Sekarang adalah textarea
-const jabatanInput = document.getElementById("jabatanInput"); // Sekarang adalah textarea
+const namaInput = document.getElementById("namaInput");
+const jabatanInput = document.getElementById("jabatanInput");
 const kreditInput = document.getElementById("kreditInput");
 const kreditColorInput = document.getElementById('kreditColor');
 
@@ -91,7 +91,7 @@ function renderTemplate() {
           canvas.height / img.height
         );
         
-        const scale = baseScale * appState.zoom; // Terapkan zoom dari slider
+        const scale = baseScale * appState.zoom; 
 
         const drawW = img.width * scale;
         const drawH = img.height * scale;
@@ -113,35 +113,24 @@ function renderTemplate() {
     }
     
 
-  // 3. Bingkai (Digambar di atas foto/background)
-  const frameMargin = 100;
-  ctx.strokeStyle = "#000000";
-  ctx.lineWidth = 1;
-  ctx.strokeRect(
-    frameMargin,
-    frameMargin,
-    canvas.width - frameMargin * 2,
-    canvas.height - frameMargin * 2
-  );
+  // 3. Bingkai (Hanya digambar jika TIDAK ADA foto)
+  if (!appState.photo) {
+        const frameMargin = 100;
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(
+            frameMargin,
+            frameMargin,
+            canvas.width - frameMargin * 2,
+            canvas.height - frameMargin * 2
+        );
+    }
     
   const margin = 160;
   const quoteBlockYStart = parseInt(quoteYSlider.value, 10);
   let currentY = quoteBlockYStart;
     
-    // 4. Latar Belakang Kotak Kutipan (Overlay untuk Readability)
-    if (appState.photo) {
-        const PADDING = 30;
-        const BOX_HEIGHT = 450; 
-        const BOX_WIDTH = canvas.width - 2 * margin;
-
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
-        ctx.fillRect(
-            margin - PADDING, 
-            quoteBlockYStart - PADDING,
-            BOX_WIDTH + 2 * PADDING,
-            BOX_HEIGHT
-        );
-    }
+    // [BAGIAN LATAR BELAKANG KOTAK KUTIPAN DIHAPUS DI SINI]
 
   // Logo kanan atas
   if (logoKoranJawaPos.complete && logoKoranJawaPos.naturalWidth > 0) {
@@ -189,7 +178,7 @@ function renderTemplate() {
 
   currentY += 60;
 
-  // Isi kutipan (Menggunakan drawMultilineText)
+  // Isi kutipan 
   const kutipanText =
     kutipanInput.value ||
     "Isi kutipan. Di sini adalah isi kutipan. Di sini adalah isi kutipan.";
@@ -210,7 +199,7 @@ function renderTemplate() {
   
   currentY += 20;
 
-  // Nama (Sekarang multi-baris)
+  // Nama 
   currentY = drawMultilineText(
     namaInput.value || "Nama",
     margin,
@@ -224,7 +213,7 @@ function renderTemplate() {
   // Jarak antar blok
   currentY += 6;
 
-  // Jabatan (Sekarang multi-baris)
+  // Jabatan 
   currentY = drawMultilineText(
     jabatanInput.value || "Jabatan",
     margin,
@@ -302,6 +291,9 @@ function initialize() {
 
     // Drag foto
     canvas.addEventListener("mousedown", (e) => {
+        // Penting: Mencegah perilaku native drag HTML saat mousedown
+        e.preventDefault(); 
+        
         if (!appState.photo) return;
         appState.isDragging = true;
         appState.dragStart = { x: e.clientX, y: e.clientY };
