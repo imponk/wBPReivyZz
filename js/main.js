@@ -15,10 +15,6 @@ const kreditColorInput = document.getElementById('kreditColor');
 const downloadBtn = document.getElementById("download");
 const canvasContainer = document.getElementById("canvasContainer");
 
-// Dapatkan elemen Label untuk Slider (Untuk UX: Tampilan nilai dinamis)
-const zoomLabel = document.querySelector('label[for="zoomSlider"]');
-const quoteYLabel = document.querySelector('label[for="quoteYSlider"]');
-
 // --- Aset & State ---
 // Pastikan path ke aset (logo) sudah benar
 const logoKoranJawaPos = new Image();
@@ -82,10 +78,11 @@ function drawMultilineText(text, x, y, font, color, lineHeight, maxWidth) {
 // --- FUNGSI RENDER UTAMA ---
 function renderTemplate() {
     
+    // Hapus konten Canvas sebelumnya
     ctx.clearRect(0, 0, canvas.width, canvas.height); 
     const frameMargin = 100;
     
-    // 1. Latar belakang kanvas penuh (putih/warna default)
+    // 1. Latar belakang kanvas penuh 
     ctx.fillStyle = "#FAF9F6";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -110,7 +107,6 @@ function renderTemplate() {
   let currentY = quoteBlockYStart;
     
     // 3. Konten Teks dan Logo
-    // ... (Logika penempatan logo dan teks) ...
 
     // Logo kanan atas
   if (logoKoranJawaPos.complete && logoKoranJawaPos.naturalWidth > 0) {
@@ -136,7 +132,7 @@ function renderTemplate() {
     logoMedsosBottomY = y + h;
   }
 
-  // Kredit Foto (diputar)
+  // Kredit Foto (diputar) - Menggunakan font Proxima Nova
   if (kreditInput.value) {
         ctx.save();
         const kreditY = logoMedsosBottomY > 0 ? logoMedsosBottomY + 50 : canvas.height - 100;
@@ -144,7 +140,7 @@ function renderTemplate() {
         ctx.rotate(Math.PI / 2);
         ctx.textAlign = 'right';
         ctx.fillStyle = kreditColorInput.value || '#000000'; 
-        ctx.font = 'bold 18px "Proxima Nova"';
+        ctx.font = 'bold 18px "Proxima Nova"'; 
         ctx.fillText(kreditInput.value, 350, 30);
         ctx.restore();
     }
@@ -168,11 +164,11 @@ function renderTemplate() {
   currentY = drawMultilineText(kutipanText, margin, currentY, kutipanFont, "#000000", kutipanLineHeight, kutipanMaxWidth);
   currentY += 20;
 
-  // Nama 
+  // Nama - Menggunakan font Proxima Nova
   currentY = drawMultilineText(namaInput.value || "Nama", margin, currentY, 'bold 32px "Proxima Nova"', "#000000", 34, canvas.width - margin * 4);
   currentY += 6;
 
-  // Jabatan 
+  // Jabatan - Menggunakan font Proxima Nova
   currentY = drawMultilineText(jabatanInput.value || "Jabatan", margin, currentY, 'italic 28px "Proxima Nova"', "#333333", 30, canvas.width - margin * 4);
 
   // Logo bawah kiri
@@ -183,7 +179,7 @@ function renderTemplate() {
   }
 
     // 4. Gambar Bingkai Kotak Hitam (Frame) FINAL
-    // Digambar di lapisan paling atas, agar tidak tertutup oleh foto.
+    // Di lapisan paling atas.
     ctx.strokeStyle = "#000000";
     ctx.lineWidth = 1;
     ctx.strokeRect(
@@ -194,39 +190,15 @@ function renderTemplate() {
     );
 }
 
-// --- FUNGSI UPDATE UX SLIDER ---
-function updateZoomLabel() {
-    zoomLabel.textContent = `Zoom Foto (${parseFloat(zoomSlider.value).toFixed(2)})`;
-}
-function updateQuoteYLabel() {
-    quoteYLabel.textContent = `Posisi Kutipan Vertikal (Y: ${quoteYSlider.value})`;
-}
-
 // --- EVENT LISTENERS ---
 function initialize() {
     
-    // Perbarui label saat pertama kali dimuat
-    updateZoomLabel();
-    updateQuoteYLabel();
-    
-    // Event listener untuk input teks dan warna
-    [kutipanInput, namaInput, jabatanInput, kreditInput, kreditColorInput].forEach(el => {
+    // Pendaftaran Event Listener untuk input teks, slider, dan select
+    [kutipanInput, namaInput, jabatanInput, kreditInput, kreditColorInput, zoomSlider, quoteYSlider].forEach(el => {
         el.addEventListener('input', renderTemplate);
-    });
-
-    // Listener KHUSUS untuk Zoom Slider
-    zoomSlider.addEventListener("input", (e) => {
-        appState.zoom = parseFloat(e.target.value); 
-        updateZoomLabel(); // UPDATE UI LABEL
-        renderTemplate();
+        el.addEventListener('change', renderTemplate);
     });
     
-    // Listener KHUSUS untuk Posisi Y Slider
-    quoteYSlider.addEventListener("input", (e) => {
-        updateQuoteYLabel(); // UPDATE UI LABEL
-        renderTemplate();
-    });
-
     // Upload foto
     uploadPhotoInput.addEventListener("change", (e) => {
         const file = e.target.files && e.target.files[0];
@@ -240,7 +212,6 @@ function initialize() {
                 // Reset zoom & offset
                 appState.zoom = 1.0;
                 zoomSlider.value = 1.0;
-                updateZoomLabel(); // Update label setelah reset
                 appState.offset = { x: 0, y: 0 };
                 renderTemplate();
             };
