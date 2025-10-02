@@ -80,14 +80,36 @@ function renderTemplate() {
     
     // Hapus konten Canvas sebelumnya
     ctx.clearRect(0, 0, canvas.width, canvas.height); 
-    const frameMargin = 100;
+    const frameMargin = 100; // Margin untuk bingkai
     
-    // 1. LAPISAN 1 (PALING BAWAH): Latar belakang kanvas 
+    // 1. LAPISAN 1 (PALING BAWAH): Latar belakang kanvas putih
     ctx.fillStyle = "#FAF9F6";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // ******************************************************
-    // *** 2. LAPISAN 2: BINGKAI KOTAK HITAM (Garis Tepi) ***
+    // *** 2. LAPISAN 2: Gambar Foto (FULL CANVAS - DI ATAS LATAR BELAKANG) ***
+    // ******************************************************
+    if (appState.photo) {
+        const img = appState.photo;
+        
+        // Hitung skala dan posisi untuk menutupi seluruh Canvas
+        const baseScale = Math.max(canvas.width / img.width, canvas.height / img.height);
+        const scale = baseScale * appState.zoom; 
+        const drawW = img.width * scale;
+        const drawH = img.height * scale;
+        
+        // Hitung posisi untuk memusatkan foto di Canvas
+        const posX = ((canvas.width - drawW) / 2) + appState.offset.x;
+        const posY = ((canvas.height - drawH) / 2) + appState.offset.y;
+
+        if (!isNaN(posX) && !isNaN(posY) && !isNaN(drawW) && !isNaN(drawH)) {
+            ctx.drawImage(img, posX, posY, drawW, drawH);
+        }
+    }
+    // ******************************************************
+
+    // ******************************************************
+    // *** 3. LAPISAN 3: BINGKAI KOTAK HITAM (DI ATAS FOTO) ***
     // ******************************************************
     const lineWidth = 1;
     ctx.strokeStyle = "#000000";
@@ -98,42 +120,6 @@ function renderTemplate() {
         canvas.width - frameMargin * 2,
         canvas.height - frameMargin * 2
     );
-    // ******************************************************
-
-    // ******************************************************
-    // *** 3. LAPISAN 3: Gambar Foto (DIBATASI OLEH BINGKAI) ***
-    // ******************************************************
-    if (appState.photo) {
-        ctx.save(); // Simpan konteks sebelum clipping
-
-        // Tentukan area clipping: Masuk ke dalam garis bingkai (setengah lineWidth)
-        const frameX = frameMargin + lineWidth / 2;
-        const frameY = frameMargin + lineWidth / 2;
-        const frameW = canvas.width - frameMargin * 2 - lineWidth; // 880 - 1 = 879
-        const frameH = canvas.height - frameMargin * 2 - lineWidth; // 880 - 1 = 879
-        
-        ctx.beginPath();
-        ctx.rect(frameX, frameY, frameW, frameH);
-        ctx.clip(); // Terapkan clipping mask
-
-        const img = appState.photo;
-        
-        // Hitung skala baru (didasarkan pada FRAME area)
-        const baseScale = Math.max(frameW / img.width, frameH / img.height); 
-        const scale = baseScale * appState.zoom; 
-        const drawW = img.width * scale;
-        const drawH = img.height * scale;
-        
-        // Hitung posisi baru (didasarkan pada FRAME area, ditambahkan offset bingkai)
-        const posX = frameX + ((frameW - drawW) / 2) + appState.offset.x;
-        const posY = frameY + ((frameH - drawH) / 2) + appState.offset.y;
-
-        if (!isNaN(posX) && !isNaN(posY) && !isNaN(drawW) && !isNaN(drawH)) {
-            ctx.drawImage(img, posX, posY, drawW, drawH);
-        }
-        
-        ctx.restore(); // Kembalikan konteks
-    }
     // ******************************************************
     
     // --- Inisialisasi posisi teks/logo ---
@@ -176,7 +162,7 @@ function renderTemplate() {
         ctx.textAlign = 'right';
         ctx.fillStyle = kreditColorInput.value || '#000000'; 
         ctx.font = 'bold 18px "Proxima Nova"'; 
-        ctx.fillText(kreditInput.value, 350, 30);
+        ctx.fillText(350, 30, kreditInput.value); // Urutan parameterfillText yang benar: text, x, y
         ctx.restore();
     }
 
@@ -258,7 +244,7 @@ function initialize() {
         }, 100);
     });
 
-    // Drag foto (Mouse Down, Move, Up) - Logika Dragging
+    // Drag foto (Mouse Down, Move, Up) - Logika Dragging (untuk foto full canvas)
     canvas.addEventListener("mousedown", (e) => {
         e.preventDefault(); 
         if (!appState.photo) return;
