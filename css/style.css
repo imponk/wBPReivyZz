@@ -1,4 +1,5 @@
 /* === FONT FACE === */
+/* Pastikan font path sudah benar */
 @font-face {
   font-family: 'Proxima Nova';
   font-weight: normal;
@@ -32,9 +33,9 @@ body {
 
 .card {
     display: flex;
-    flex-direction: column; /* H1 di atas wrapper */
+    flex-direction: column; 
     align-items: center; 
-    max-width: 1500px; /* Melebar untuk menampung controls + canvas */
+    max-width: 1500px; 
     width: 100%;
 }
 
@@ -49,8 +50,8 @@ h1 {
 
 .main-content-wrapper {
     display: flex;
-    gap: 30px; /* Jarak antara controls dan canvas */
-    align-items: flex-start; /* Controls dan Canvas sejajar dari atas */
+    gap: 30px; 
+    align-items: flex-start; /* Sejajar dari atas */
     width: 100%;
     margin-top: 15px;
     justify-content: center;
@@ -59,7 +60,6 @@ h1 {
 .controls-container {
     display: flex;
     flex-direction: column;
-    /* Lebar tetap agar tidak terlalu memakan tempat */
     width: 100%; 
     max-width: 400px; 
 }
@@ -138,11 +138,13 @@ textarea {
 
 /* === CANVAS === */
 .canvas-container {
-  margin-top: 20px; /* Hapus margin atas agar sejajar dengan controls */
+  /* Margin dihilangkan karena sudah diatur oleh main-content-wrapper gap */
+  margin-top: 0; 
   border: 1px solid #ddd;
   cursor: grab;
-  width: 1080px;
-  max-width: 90vw; 
+  /* Menggunakan max-width agar lebih responsif di layar kecil */
+  width: 100%;
+  max-width: 400px; /* Di layar kecil, controls dan canvas akan bertumpuk, ini membatasi lebar canvas */
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
   background: #fff;
@@ -157,4 +159,13 @@ textarea {
 
 .canvas-container.grabbing {
   cursor: grabbing;
+}
+
+/* Media Query untuk layar desktop/lebar */
+@media (min-width: 900px) {
+    .canvas-container {
+        /* Mengatur lebar aktual Canvas agar terlihat jelas di layar besar */
+        max-width: 400px; /* Agar Canvas tidak terlalu lebar di desktop */
+        width: 400px;
+    }
 }
