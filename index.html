@@ -1,85 +1,91 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Jawa Pos Instagram Quote Generator</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jawa Pos Instagram Quote Generator</title>
 
-<link rel="stylesheet" type="text/css;charset=utf-8" href="https://cdn.jsdelivr.net/npm/@typehaus/metropolis/index.css" crossorigin="anonymous">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="css/style.css">
-
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@typehaus/metropolis/index.css" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<div class="card">
+  <div class="card">
     <h1>Instagram Quote Generator</h1>
-    
-    <div class="main-content-wrapper"> 
-        
-        <div class="controls-container"> 
-            
-            <h2>Konten Kutipan</h2>
-            <div class="controls">
-                <div>
-                    <label for="kutipanInput">Kutipan</label>
-                    <textarea id="kutipanInput" placeholder="Masukkan kutipan di sini..."></textarea>
-                </div>
-                <div>
-                    <label for="namaInput">Nama Tokoh (Multi-baris)</label>
-                    <textarea id="namaInput" placeholder="Nama sumber kutipan, mis: Prof. Dr. Andi Bachtiar"></textarea>
-                </div>
-                <div>
-                    <label for="jabatanInput">Jabatan / Keterangan (Multi-baris)</label>
-                    <textarea id="jabatanInput" placeholder="Jabatan atau keterangan tambahan, mis: Pakar Ekonomi UI"></textarea>
-                </div>
-            </div>
 
-            <h2>Kontrol Foto & Kredit</h2>
-            <div class="controls">
-                <div>
-                    <label for="uploadPhoto">Upload Foto Latar</label>
-                    <input id="uploadPhoto" type="file" accept="image/*">
-                </div>
-                <div>
-                    <label for="kreditInput">Kredit Foto (Opsional)</label>
-                    <input type="text" id="kreditInput" placeholder="Nama fotografer, mis: Jawa Pos/Fahmi" />
-                </div>
-                <div>
-                    <label for="kreditColor">Warna Kredit Foto</label>
-                    <select id="kreditColor">
-                        <option value="#000000">Hitam (Default)</option>
-                        <option value="#FFFFFF">Putih</option>
-                    </select>
-                </div>
+    <div class="main-content-wrapper">
+
+      <!-- Kontrol Input -->
+      <div class="controls-container">
+
+        <section>
+          <h2>Konten Kutipan</h2>
+          <div class="controls">
+            <div>
+              <label for="kutipanInput">Kutipan</label>
+              <textarea id="kutipanInput" placeholder="Masukkan kutipan di sini..."></textarea>
             </div>
-            
-            <h2>Penyesuaian Visual (Canvas)</h2>
-            <div class="slider-controls">
-                <div>
-                    <label for="zoomSlider">Zoom Foto</label>
-                    <input type="range" id="zoomSlider" min="0.1" max="3" step="0.01" value="1" />
-                </div>
-                <div>
-                    <label for="quoteYSlider">Geser Blok Kutipan Vertikal (Y)</label>
-                    <input type="range" id="quoteYSlider" min="200" max="800" value="385" />
-                </div>
+            <div>
+              <label for="namaInput">Nama Tokoh</label>
+              <textarea id="namaInput" placeholder="Misalnya: Prof. Dr. Andi Bachtiar"></textarea>
             </div>
-            
-            <div class="controls">
-                <div>
-                    <button id="download">DOWNLOAD HASIL (JPEG)</button>
-                </div>
+            <div>
+              <label for="jabatanInput">Jabatan / Keterangan</label>
+              <textarea id="jabatanInput" placeholder="Misalnya: Pakar Ekonomi UI"></textarea>
             </div>
-        </div>
-        
-        <div class="canvas-container" id="canvasContainer">
-            <canvas id="canvas" width="1080" height="1350"></canvas>
-        </div>
+          </div>
+        </section>
+
+        <section>
+          <h2>Kontrol Foto & Kredit</h2>
+          <div class="controls">
+            <div>
+              <label for="uploadPhoto">Upload Foto Latar</label>
+              <input id="uploadPhoto" type="file" accept="image/*">
+            </div>
+            <div>
+              <label for="kreditInput">Kredit Foto (Opsional)</label>
+              <input type="text" id="kreditInput" placeholder="Misalnya: Jawa Pos/Fahmi" />
+            </div>
+            <div>
+              <label for="kreditColor">Warna Kredit Foto</label>
+              <select id="kreditColor">
+                <option value="#000000">Hitam (Default)</option>
+                <option value="#FFFFFF">Putih</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2>Penyesuaian Visual</h2>
+          <div class="slider-controls">
+            <div>
+              <label for="zoomSlider">Zoom Foto</label>
+              <input type="range" id="zoomSlider" min="0.1" max="3" step="0.01" value="1" />
+            </div>
+            <div>
+              <label for="quoteYSlider">Geser Blok Kutipan Vertikal (Y)</label>
+              <input type="range" id="quoteYSlider" min="200" max="800" value="385" />
+            </div>
+          </div>
+          <div class="controls">
+            <div>
+              <button id="download">Download Hasil (JPEG)</button>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Canvas Preview -->
+      <div class="canvas-container" id="canvasContainer">
+        <canvas id="canvas" width="1080" height="1350"></canvas>
+      </div>
+
     </div>
-</div>
+  </div>
 
-<script src="js/main.js"></script>
-
+  <script src="js/main.js"></script>
 </body>
 </html>
