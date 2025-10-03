@@ -1,186 +1,179 @@
-/* === FONT FACE === */
-@font-face {
-  font-family: 'Proxima Nova';
-  font-weight: normal;
-  font-style: normal;
-  src: url('assets/proxima-nova-regular.woff2') format('woff2'); 
+/* === RESET & BASE === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-@font-face {
-  font-family: 'Proxima Nova';
-  font-weight: normal;
-  font-style: italic;
-  src: url('assets/proxima-nova-italic.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Proxima Nova';
-  font-weight: bold;
-  font-style: normal;
-  src: url('assets/proxima-nova-bold.woff2') format('woff2');
-}
-
-/* === GLOBAL === */
 body {
-  font-family: 'Proxima Nova', system-ui, sans-serif;
-  background: #fafafa;
-  margin: 0;
-  padding: 24px 10px; 
-  display: flex;
-  justify-content: center;
+  font-family: 'Proxima Nova', system-ui, sans-serif;
+  background: linear-gradient(135deg, #f5f9fc, #eef3f7);
+  display: flex;
+  justify-content: center;
+  padding: 32px 16px;
+  color: #2d2d2d;
 }
 
+/* === CARD WRAPPER === */
 .card {
-    display: flex;
-    flex-direction: column; 
-    align-items: center; 
-    max-width: 1500px; 
-    width: 100%;
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px;
+  max-width: 1500px;
+  width: 100%;
+  box-shadow: 0 12px 24px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
+/* === TITLE === */
 h1 {
-  margin: 0 0 12px;
-  font-size: 22px;
-  font-weight: bold;
-  text-align: center;
+  font-size: 26px;
+  font-weight: 700;
+  text-align: center;
+  color: #007cbc;
+  margin-bottom: 10px;
 }
 
-/* --- TATA LETAK UTAMA: MOBILE FIRST (BERTUMPUK) --- */
+/* === SECTION HEADER === */
+.card h2 {
+  margin: 25px 0 12px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #007cbc;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-left: 4px solid #007cbc;
+  padding-left: 10px;
+}
 
+/* === MAIN LAYOUT === */
 .main-content-wrapper {
-    display: flex;
-    flex-direction: column; 
-    gap: 20px;
-    align-items: center; 
-    width: 100%;
-    margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
 }
 
 .controls-container {
-    display: flex;
-    flex-direction: column;
-    width: 100%; 
-    max-width: 400px; 
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 420px;
+  width: 100%;
 }
 
-/* --- Styling Tambahan untuk UX --- */
-
-.card h2 {
-    margin: 20px 0 10px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #007cbc; 
-    border-bottom: 1px solid #eee;
-    padding-bottom: 4px;
-    width: 100%;
-    text-align: left;
-}
-
-
-/* === FORM CONTROL === */
+/* === FORM ELEMENTS === */
 .controls,
 .slider-controls {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 100%;
-}
-
-.controls div,
-.slider-controls div {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
 }
 
 label {
-  font-weight: bold;
-  font-size: 14px;
-  margin-bottom: 2px;
-  color: #333;
+  font-size: 13px;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 4px;
 }
 
-button,
 input,
 textarea,
 select {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  background: #fff;
-  font-family: inherit;
-  font-size: 14px;
-  width: 100%;
-  box-sizing: border-box;
-  transition: all 0.2s ease;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #dcdfe4;
+  font-size: 14px;
+  background: #fafbfc;
+  transition: all 0.25s ease;
 }
 
-button {
-  background: #007cbc;
-  color: #fff;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #005a8f;
-}
-
-button:active {
-  transform: scale(0.97);
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: #007cbc;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(0,124,188,0.15);
 }
 
 textarea {
-  min-height: 80px;
-  resize: vertical;
+  min-height: 90px;
+  resize: vertical;
 }
 
-/* ATUR UKURAN TEXTAREA NAMA DAN JABATAN */
 #namaInput,
 #jabatanInput {
-    min-height: 40px; 
-    max-height: 100px;
+  min-height: 50px;
+  max-height: 120px;
 }
 
-/* === CANVAS === */
+/* === BUTTON === */
+button {
+  padding: 12px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #007cbc, #0099d6);
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+button:hover {
+  background: linear-gradient(135deg, #00619b, #0084ba);
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+/* === CANVAS CONTAINER === */
 .canvas-container {
-  margin-top: 0; 
-  border: 1px solid #ddd;
-  cursor: grab;
-  width: 100%; 
-  max-width: 400px; 
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-  background: #fff;
-  /* Penting untuk mencegah native drag ghosting */
-  user-select: none; 
+  border: 1px solid #e5e8ec;
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+  background: #fff;
+  padding: 10px;
+  max-width: 440px;
+  width: 100%;
 }
 
 .canvas-container canvas {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 8px;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
 }
 
+/* Cursor feedback */
+.canvas-container {
+  cursor: grab;
+}
 .canvas-container.grabbing {
-  cursor: grabbing;
+  cursor: grabbing;
 }
 
-/* --- MEDIA QUERY: LAYAR LEBAR (BERDAMPINGAN) --- */
+/* === RESPONSIVE === */
 @media (min-width: 900px) {
-    body {
-        padding: 30px;
-    }
-    
-    .main-content-wrapper {
-        flex-direction: row; 
-        align-items: flex-start; 
-        justify-content: center;
-    }
-    
-    .canvas-container {
-        width: 400px; 
-        max-width: 400px;
-    }
+  .main-content-wrapper {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 50px;
+  }
+  
+  .controls-container {
+    flex: 1;
+  }
+  
+  .canvas-container {
+    flex: 1;
+  }
 }
