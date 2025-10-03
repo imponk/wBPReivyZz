@@ -43,6 +43,7 @@ h1 {
   font-size: 22px;
   font-weight: bold;
   text-align: center;
+  color: #007cbc;
 }
 
 /* --- TATA LETAK UTAMA: MOBILE FIRST (BERTUMPUK) --- */
@@ -55,7 +56,7 @@ h1 {
   margin-top: 15px;
 }
 
-/* === CONTROLS CONTAINER (perbaikan) === */
+/* === CONTROLS CONTAINER (modern) === */
 .controls-container {
   display: flex;
   flex-direction: column;
@@ -162,38 +163,45 @@ h1 {
   border: 1px solid #ddd;
   cursor: grab;
   width: 100%; 
-  max-width: 400px; 
-  border-radius: 8px;
+  border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
   background: #fff;
   user-select: none; 
+  padding: 10px;
 }
 
 .canvas-container canvas {
   width: 100%;
   height: auto;
   display: block;
-  border-radius: 8px;
+  border-radius: 10px;
 }
 
 .canvas-container.grabbing {
   cursor: grabbing;
 }
 
-/* --- MEDIA QUERY: LAYAR LEBAR (BERDAMPINGAN) --- */
+/* --- MEDIA QUERY: LAYAR LEBAR (BERDAMPINGAN, canvas dominan) --- */
 @media (min-width: 900px) {
   body {
     padding: 30px;
   }
-  
+
   .main-content-wrapper {
     flex-direction: row; 
     align-items: flex-start; 
     justify-content: center;
+    gap: 40px; /* jarak antar kolom */
   }
-  
+
+  .controls-container {
+    flex: 0.7;   /* sekitar 40% */
+    max-width: none; /* biar fleksibel */
+  }
+
   .canvas-container {
-    width: 400px; 
-    max-width: 400px;
+    flex: 1.3;   /* sekitar 60% */
+    max-width: none;
+    padding: 16px;
   }
 }
